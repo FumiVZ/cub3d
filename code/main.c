@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:35:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 17:46:41 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/25 22:08:54 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ int	test(void)
 	return (0);
 }
 
-
-t_game	init_game(t_game *game, char *name_file)
+void	init_game(t_game *game, char *name_file)
 {
 	t_data		data;
 	t_map		map;
@@ -37,7 +36,11 @@ t_game	init_game(t_game *game, char *name_file)
 	game->data = &data;
 	game->map = &map;
 	game->window = &window;
-	return (*game);
+	print_tab(map.map);
+	print_tab(game->map->map);
+	mlx_hook(game->window->win_ptr, DestroyNotify, ButtonPressMask,
+		ft_close_game, game);
+	mlx_loop(game->window->mlx_ptr);
 }
 
 int	main(int ac, char **av)
@@ -45,13 +48,6 @@ int	main(int ac, char **av)
 	t_game	game;
 
 	check_error(ac, av);
-	game = init_game(&game, av[1]);
-/* 	mlx_hook(game.window->win_ptr, DestroyNotify, ButtonPressMask,
-		ft_close_game, &game);
-	mlx_loop(game.window->mlx_ptr);
-	mlx_destroy_window(game.window->mlx_ptr, game.window->win_ptr);
-	mlx_destroy_display(game.window->mlx_ptr);
-	free(game.window->mlx_ptr); */
-	// ft_lstclear(&game.map->lst_map, free);
+	init_game(&game, av[1]);
 	return (0);
 }

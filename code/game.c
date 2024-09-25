@@ -3,18 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 15:58:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/25 21:59:19 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h> 
 
-int	ft_close_game(t_game *game)
-{
-	free_map(game->map);
-	free_data(game->data);
-	exit(0);
-}
+

@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 13:33:48 by machrist          #+#    #+#             */
-/*   Updated: 2024/01/17 17:08:51 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/25 21:51:14 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,20 @@ void	free_split(char **str, size_t pos)
 	if (!*str)
 		return (free(str));
 	i = 0;
-	while (i < pos)
+	while (i <= pos)
 		free(str[i++]);
 	free(str);
+}
+
+int	init_split(char const *s, char c, char ***str, size_t *i)
+{
+	if (!s)
+		return (1);
+	*str = malloc(sizeof(char *) * (count_word(s, c) + 1));
+	if (!*str)
+		return (1);
+	*i = 0;
+	return (0);
 }
 
 char	**ft_split(char const *s, char c)
@@ -77,21 +88,20 @@ char	**ft_split(char const *s, char c)
 	size_t	i;
 	size_t	pos;
 
-	if (!s)
+	if (init_split(s, c, &str, &i))
 		return (NULL);
-	str = malloc(sizeof(char *) * (count_word(s, c) + 1));
-	if (!str)
-		return (NULL);
-	i = 0;
 	pos = 0;
 	while (s[i])
 	{
 		while (s[i] && s[i] == c)
 			++i;
 		if (s[i])
+		{
 			str[pos] = crt_word(s + i, c);
-		if (!str[pos++])
-			return (free_split(str, --pos), NULL);
+			if (!str[pos])
+				return (free_split(str, pos + 1), NULL);
+			pos++;
+		}
 		while (s[i] && s[i] != c)
 			++i;
 	}

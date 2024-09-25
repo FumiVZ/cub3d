@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 18:40:59 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/25 21:43:29 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	is_empty(char *line)
 		return (1);
 	return (0);
 }
-
 
 bool	check_adjacent(char **map, size_t i, size_t j, char c)
 {
@@ -106,45 +105,49 @@ bool	is_correct_map(t_map *map)
 	return (check_zero(map));
 }
 
-static char	*ft_strappend(char **s1, const char *s2)
+static char	*ft_strappend(char *s1, char *s2)
 {
 	char	*str;
 
-	if (!*s1 || !s2)
+	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)ft_calloc((ft_strlen(*s1) + ft_strlen(s2)) + 1, sizeof(char));
+	str = (char *)ft_calloc((ft_strlen(s1) + ft_strlen(s2)) + 1, sizeof(char));
 	if (!str)
+	{
+		free(s1);
+		free(s2);
 		return (NULL);
-	ft_strlcpy(str, *s1, ft_strlen(*s1) + 1);
-	ft_strlcat(str, s2, ft_strlen(*s1) + ft_strlen(s2) + 1);
-	free(*s1);
+	}
+	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
+	ft_strlcat(str, s2, ft_strlen(s1) + ft_strlen(s2) + 1);
+	free(s1);
 	return (str);
 }
 
-void	ft_init_map(t_game *game, char *av)
+bool	check_map(t_map *map, int fd)
 {
-	char	*map;
+	char	*tmp;
 	char	*line;
-	int		fd;
 
-	fd = open(av, O_RDONLY);
-	if (fd < 0)
-		ft_error_msg("Map file not found", game);
-	map = ft_strdup("");
-	game->map.rows = 0;
-	while (true)	
+	tmp = ft_strdup("");
+	if (!tmp)
+		return (fprintf(stderr, "Malloc failed\n"), false);
+	map->map_x = 0;
+	while (true)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		map = ft_strappend(&map, line);
-		if (!map)
-			ft_error_msg("Malloc failed", game);
+		if (map->map_x < ft_strlen(line))
+			map->map_x = ft_strlen(line) - 1;
+		tmp = ft_strappend(tmp, line);
+		if (!tmp)
+			return (fprintf(stderr, "Malloc failed\n"), false);
 		free(line);
-		game->map.rows++;
 	}
 	close(fd);
-	ft_check_for_empty_lines(map, game);
-	game->map.full = ft_split(map, '\n');
-	free(map);
+	map->map = ft_split(tmp, '\n');
+	map->map_y = ft_strstrlen(map->map);
+	free(tmp);
+	return (is_correct_map(map));
 }

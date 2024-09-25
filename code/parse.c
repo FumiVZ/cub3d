@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 17:29:38 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/25 21:27:42 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,19 @@ int	check_parse(t_data *data)
 
 int	is_finished(t_data *data)
 {
-	if (data->no && data->so && data->we
-		&& data->ea && data->c && data->f)
+	if (data->no && data->so && data->we && data->ea && data->c && data->f)
 		return (1);
 	return (0);
 }
 
-void print_tab(char **tab)
+void	print_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
 	{
-		fprintf(stderr, "%s", tab[i]);
+		fprintf(stderr, "%s\n", tab[i]);
 		i++;
 	}
 }
@@ -104,17 +103,15 @@ void	parse_file(t_data *data, t_map *map, int fd)
 		while (line[i] && is_space(line[i]))
 			i++;
 		if (is_finished(data))
-		{
-			if (!check_map(map, fd))
-			{
-				free(line);
-				exit_close_msg(fd, ERR_PARSE, data);
-			}
 			break ;
-		}
 		parse_textures(line, data, i);
 		free(line);
 		line = get_next_line(fd);
+	}
+	if (!check_map(map, fd))
+	{
+		free(line);
+		exit_close_msg(fd, ERR_PARSE, data);
 	}
 	free(line);
 }
