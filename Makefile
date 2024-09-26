@@ -3,8 +3,9 @@ CFLAGS = -Wall -Wextra -Werror -g
 CC = cc
 BUILD_DIR = build
 SRCS_DIR = code/
+HEADERS = $(addprefix $(SRCS_DIR), cub3d.h)
 
-SRC =    $(addprefix $(SRCS_DIR), error.c free.c main.c map.c parse.c texture.c utils.c init_mlx.c game.c)
+SRC = $(addprefix $(SRCS_DIR), error.c free.c main.c map.c parse.c texture.c utils.c init_mlx.c game.c)
 
 LIBFT = libft.a
 LIBMLX = libmlx.a
@@ -13,34 +14,38 @@ LIB_PATH = libft
 MLX_PATH = minilibx-linux
 LIB_DIR = -Ilibft -Iminilibx-linux -Icode
 
-OBJECTS = $(SRC:%.c=$(BUILD_DIR)/%.o)
+OBJECTS = $(SRC:$(SRCS_DIR)%.c=$(BUILD_DIR)/%.o)
 
-all: $(NAME)
+all: $(LIBFT) $(LIBMLX) $(NAME)
 
 $(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
-	mkdir -p $(BUILD_DIR)/code
+	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/code
 
-$(NAME): $(BUILD_DIR) $(LIBFT) $(LIBMLX) $(OBJECTS) code/cub3d.h 
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) libft/libft.a $(MLX_PATH)/$(LIBMLX) -Lmlx -L/usr/lib/X11 -lXext -lX11
+$(NAME): $(BUILD_DIR) $(OBJECTS) $(HEADERS) 
+	@$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIB_PATH)/$(LIBFT) $(MLX_PATH)/$(LIBMLX) -Lmlx -L/usr/lib/X11 -lXext -lX11
+	@echo "Build complete: $(NAME)"
 
-$(BUILD_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(LIB_DIR)
+$(BUILD_DIR)/%.o: $(SRCS_DIR)%.c $(HEADERS)
+	@$(CC) $(CFLAGS) -c $< -o $@ $(LIB_DIR)
+	@echo "Compiled: $<"
 
 $(LIBFT):	
-	$(MAKE) -C $(LIB_PATH)
+	@$(MAKE) -C $(LIB_PATH) -s
 
 $(LIBMLX):
-	$(MAKE) -C $(MLX_PATH)
+	@$(MAKE) -C $(MLX_PATH) -s
 
 clean:
-	rm -rf $(BUILD_DIR)
-	$(MAKE) -C $(LIB_PATH) clean
-	$(MAKE) -C $(MLX_PATH) clean
+	@rm -rf $(BUILD_DIR)
+	@$(MAKE) -C $(LIB_PATH) clean -s
+	@$(MAKE) -C $(MLX_PATH) clean -s
+	@echo "Clean complete"
 
 fclean: clean
-	rm -rf $(NAME)
-	$(MAKE) -C $(LIB_PATH) fclean
+	@rm -rf $(NAME)
+	@$(MAKE) -C $(LIB_PATH) fclean -s
+	@echo "Full clean complete"
 
 re: fclean all
 

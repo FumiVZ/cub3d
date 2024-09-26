@@ -6,16 +6,11 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:35:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/26 13:41:29 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/26 16:22:18 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
-int	test(void)
-{
-	return (0);
-}
 
 void	init_game(t_game *game, char *name_file)
 {
@@ -37,7 +32,7 @@ void	init_game(t_game *game, char *name_file)
 	game->map = &map;
 	game->window = &window;
 	print_tab(map.map);
-	print_tab(game->map->map);
+	ft_render_map(game);
 	mlx_hook(game->window->win_ptr, DestroyNotify, ButtonPressMask,
 		ft_close_game, game);
 	mlx_loop(game->window->mlx_ptr);
