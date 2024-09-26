@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:35:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 22:08:54 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/26 13:41:29 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	init_game(t_game *game, char *name_file)
 
 	data = (t_data){0};
 	map = (t_map){0};
-	init_mlx(&window);
 	fd = open(name_file, O_RDONLY);
 	if (fd == -1)
 		ft_exit_error(ERR_OPEN);
 	parse_file(&data, &map, fd);
+	init_mlx(&window);
 	if (check_parse(&data))
-		exit_close_msg(fd, ERR_PARSE, &data);
+		exit_close_msg(fd, ERR_PARSE, &data, &map);
 	game->data = &data;
 	game->map = &map;
 	game->window = &window;

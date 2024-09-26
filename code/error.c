@@ -6,17 +6,19 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:52:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 14:42:12 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/26 13:41:13 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-void	exit_close_msg(int fd, char *msg, t_data *data)
+void	exit_close_msg(int fd, char *msg, t_data *data, t_map *map)
 {
 	close(fd);
 	if (data)
 		free_data(data);
+	if (map)
+		free_map(map);
 	ft_putstr_fd(msg, 2);
 	exit(1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 21:27:42 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/26 13:42:28 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	parse_file(t_data *data, t_map *map, int fd)
 
 	line = get_next_line(fd);
 	if (!line)
-		exit_close_msg(fd, ERR_MALLOC, NULL);
+		exit_close_msg(fd, ERR_MALLOC, NULL, NULL);
 	while (line)
 	{
 		i = 0;
@@ -111,7 +111,7 @@ void	parse_file(t_data *data, t_map *map, int fd)
 	if (!check_map(map, fd))
 	{
 		free(line);
-		exit_close_msg(fd, ERR_PARSE, data);
+		exit_close_msg(fd, ERR_PARSE, data, map);
 	}
 	free(line);
 }

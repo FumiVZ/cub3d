@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 20:53:22 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/26 13:41:40 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct s_game
 
 //	===== @functions =====
 // error.c
-void exit_close_msg(int fd, char *msg, t_data *data);
+void exit_close_msg(int fd, char *msg, t_data *data, t_map *map);
 void ft_exit_error(char *str);
 void check_error(int ac, char **av);
 
