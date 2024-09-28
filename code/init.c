@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 21:08:22 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 00:46:11 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ static void	init_data(t_data *data)
 	data->ea = NULL;
 	data->c = NULL;
 	data->f = NULL;
-	data->res_x = 6;
-	data->res_y = 6;
 }
 
 static void	init_map(t_map *map)

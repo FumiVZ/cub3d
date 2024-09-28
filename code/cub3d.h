@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 23:45:48 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 00:48:15 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ typedef struct s_image
 
 typedef struct s_data
 {
-	int			res_x;
-	int			res_y;
 	char		*no;
 	char		*so;
 	char		*we;
@@ -173,12 +171,14 @@ int				*parse_color(char *line, char *search, size_t i);
 
 int				ft_close_game(t_game *game);
 int				ft_render_map(t_game *game);
-void			raycasting(t_game *game);
 int				key_press(int keycode, t_game *game);
 void			init_game(t_game *game);
 void			ft_init_textures(t_game *game);
 void			ft_render_texture(t_game *game, t_image texture, int line,
 					int column);
 void			draw_vision(t_game *game);
+void			draw_3d_projection(t_game *game);
+double			get_direction_x(double angle);
+double			get_direction_y(double angle);
 
 #endif

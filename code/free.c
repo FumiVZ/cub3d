@@ -6,12 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:07:21 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 20:04:58 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 00:46:01 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
 
 static void	free_map(t_map *map)
 {
