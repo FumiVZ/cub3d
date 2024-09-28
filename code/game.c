@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 21:32:01 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/28 23:47:39 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,8 @@ int	ft_render_map(t_game *game)
 		}
 		y++;
 	}
+	ft_render_texture(game, game->data->player, game->map->player->pos->y,
+		game->map->player->pos->x);
+	draw_vision(game);
 	return (0);
 }

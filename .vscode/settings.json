@@ -15,6 +15,7 @@
 		"limits": "c",
 		"ostream": "c",
 		"streambuf": "c",
-		"tuple": "c"
+		"tuple": "c",
+		"cmath": "c"
 	}
 }

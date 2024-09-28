@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 22:09:48 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/28 23:45:48 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # define FLOOR_COLOR 0x0000FF00
 # define PLAYER_COLOR 0x000000FF
 
-# define FOV 60
+# define FOV 90
 # define NB_RAYS 100
 # define STEP_SIZE 0.1
 # define RAY_LENGTH 35
@@ -177,8 +177,8 @@ void			raycasting(t_game *game);
 int				key_press(int keycode, t_game *game);
 void			init_game(t_game *game);
 void			ft_init_textures(t_game *game);
-
 void			ft_render_texture(t_game *game, t_image texture, int line,
 					int column);
+void			draw_vision(t_game *game);
 
 #endif
