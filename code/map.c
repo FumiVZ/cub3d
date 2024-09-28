@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 16:00:21 by vincent          ###   ########.fr       */
+/*   Updated: 2024/09/28 21:55:24 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,11 @@ bool	check_zero(t_map *map)
 		{
 			if (map->map[j][i] == 'N')
 			{
-				map->player.pos.x = i;
-				map->player.pos.y = j;
+				map->player->pos->x = (double)i;
+				map->player->pos->y = (double)j;
+				map->player->dir->x = -1;
+				map->player->dir->y = 0;
+				map->map[j][i] = '0';
 			}
 			if (map->map[j][i] == '0')
 			{

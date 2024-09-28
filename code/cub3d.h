@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 15:58:23 by vincent          ###   ########.fr       */
+/*   Updated: 2024/09/28 22:09:48 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
+# include <math.h>
 # include <mlx.h>
 # include <mlx_int.h>
 # include <stdbool.h>
@@ -36,19 +37,45 @@
 # define HEIGHT 1080
 # define WIDTH 1080
 
+# define ROTATE_LEFT 65361
+# define ROTATE_RIGHT 65363
+# define FORWARD_W_Z 119
+# define BACK_S_S 115
+# define RIGHT_D_D 100
+# define LEFT_A_Q 97
+
+# define KEY_Q 113
+# define KEY_ESC 65307
+
+# define PI 3.14159265359
+# ifndef M_PI_2
+#  define M_PI_2 1.57079632679
+# endif
+# ifndef M_PI_3
+#  define M_PI_3 4.71238898038
+# endif
+
+# define TILE_SIZE 32
+# define WALL_COLOR 0x00FF0000
+# define FLOOR_COLOR 0x0000FF00
+# define PLAYER_COLOR 0x000000FF
+
+# define FOV 60
+# define NB_RAYS 100
+# define STEP_SIZE 0.1
+# define RAY_LENGTH 35
+
 typedef struct s_position
 {
 	double		x;
 	double		y;
 }				t_position;
 
-typedef struct s_window
+typedef struct s_mlx
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
-	int			size_x;
-	int			size_y;
-}				t_window;
+}				t_mlx;
 
 typedef struct s_image
 {
@@ -74,41 +101,55 @@ typedef struct s_data
 
 typedef struct s_player
 {
-	t_position	pos;
-	float		dir;
+	t_position	*pos;
+	t_position	*dir;
 }				t_player;
+
+typedef struct s_ray
+{
+	t_player	*player;
+	t_position	plane;
+	t_position	raydir;
+	double		camerax;
+	int			mapx;
+	int			mapy;
+	t_position	sidedist;
+	t_position	deltadist;
+	int			stepx;
+	int			stepy;
+	int			hit;
+	int			side;
+	double		perpwalldist;
+	int			lineheight;
+	int			drawstart;
+	int			drawend;
+	int			x;
+}				t_ray;
 
 typedef struct s_map
 {
 	char		**map;
 	size_t		map_x;
 	size_t		map_y;
-	t_player	player;
+	t_player	*player;
 }				t_map;
 
 typedef struct s_game
 {
 	t_map		*map;
+	t_ray		*ray;
 	t_data		*data;
-	t_window	*window;
+	t_mlx		*mlx;
 }				t_game;
 
 //	===== @functions =====
 // error.c
-void exit_close_msg(int fd, char *msg, t_data *data, t_map *map);
-void ft_exit_error(char *str);
-void check_error(int ac, char **av);
-
-// free.c
-void			free_map(t_map *map);
-void			free_data(t_data *data);
-
-// main.c
-int				test(void);
+void			exit_close_msg(int fd, char *msg, t_data *data, t_map *map);
+void			ft_exit_error(char *str);
+void			check_error(int ac, char **av);
 
 // map.c
 int				is_empty(char *line);
-t_map			*ft_remap(t_map *map, char *line);
 bool			check_zero(t_map *map);
 bool			is_space_or_one(char c);
 bool			is_correct_map(t_map *map);
@@ -130,12 +171,14 @@ char			**erase_space(char **tab);
 int				*assign_color(char **tab, int *color);
 int				*parse_color(char *line, char *search, size_t i);
 
-// utils.c
-bool			zero_check(char c);
-bool			is_player(char c);
-
-void			init_mlx(t_window *window);
 int				ft_close_game(t_game *game);
 int				ft_render_map(t_game *game);
+void			raycasting(t_game *game);
+int				key_press(int keycode, t_game *game);
+void			init_game(t_game *game);
+void			ft_init_textures(t_game *game);
+
+void			ft_render_texture(t_game *game, t_image texture, int line,
+					int column);
 
 #endif

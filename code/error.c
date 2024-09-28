@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:52:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/26 13:41:13 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/28 19:42:29 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 void	exit_close_msg(int fd, char *msg, t_data *data, t_map *map)
 {
 	close(fd);
-	if (data)
-		free_data(data);
-	if (map)
-		free_map(map);
+	(void)data;
+	(void)map;
+	// if (data)
+	// 	free_data(data);
+	// if (map)
+	// 	free_map(map);
 	ft_putstr_fd(msg, 2);
 	exit(1);
 }

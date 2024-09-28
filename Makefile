@@ -5,7 +5,7 @@ BUILD_DIR = build
 SRCS_DIR = code/
 HEADERS = $(addprefix $(SRCS_DIR), cub3d.h)
 
-SRC = $(addprefix $(SRCS_DIR), error.c free.c main.c map.c parse.c texture.c utils.c init_mlx.c game.c)
+SRC = $(addprefix $(SRCS_DIR), free.c init.c main.c  parse.c texture.c error.c  game.c  key.c map.c raycasting.c utils.c)
 
 LIBFT = libft.a
 LIBMLX = libmlx.a
@@ -23,7 +23,7 @@ $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)/code
 
 $(NAME): $(BUILD_DIR) $(OBJECTS) $(HEADERS) 
-	@$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIB_PATH)/$(LIBFT) $(MLX_PATH)/$(LIBMLX) -Lmlx -L/usr/lib/X11 -lXext -lX11
+	@$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIB_PATH)/$(LIBFT) $(MLX_PATH)/$(LIBMLX) -Lmlx -L/usr/lib/X11 -lXext -lX11 -lm
 	@echo "Build complete: $(NAME)"
 
 $(BUILD_DIR)/%.o: $(SRCS_DIR)%.c $(HEADERS)

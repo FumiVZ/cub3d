@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/26 13:42:28 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/28 21:03:02 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-void	parse_res(char *line, t_data *data, size_t i)
-{
-	return ;
-	data->res_x = ft_atoi(line + i);
-	while (line[i] && ft_isdigit(line[i]))
-		i++;
-	while (line[i] && is_space(line[i]))
-		i++;
-	data->res_y = ft_atoi(line + i);
-}
+// void	parse_res(char *line, t_data *data, size_t i)
+// {
+// 	return ;
+// 	data->res_x = ft_atoi(line + i);
+// 	while (line[i] && ft_isdigit(line[i]))
+// 		i++;
+// 	while (line[i] && is_space(line[i]))
+// 		i++;
+// 	data->res_y = ft_atoi(line + i);
+// }
 
 void	print_int_tab(int *tab)
 {
