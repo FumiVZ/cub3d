@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/26 15:21:27 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:00:21 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ bool	is_correct_map(t_map *map)
 
 	j = -1;
 	i = -1;
+	if (!map->map || !map->map[0] || !map->map[0][0])
+		return (false);
 	map->map_y--;
 	while (map->map[0][++i])
 		if (!is_space_or_one(map->map[0][i]))
@@ -129,6 +131,8 @@ bool	check_map(t_map *map, int fd)
 	char	*tmp;
 	char	*line;
 
+	if (!map)
+		return (fprintf(stderr, "Map is NULL\n"), false);
 	tmp = ft_strdup("");
 	if (!tmp)
 		return (fprintf(stderr, "Malloc failed\n"), false);
