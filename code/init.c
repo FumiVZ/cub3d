@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 00:46:11 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:40:26 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,31 +48,6 @@ static void	init_mlx(t_mlx *mlx)
 		ft_exit_error("Error\nmlx_new_window failed\n");
 }
 
-static void	init_ray(t_ray *ray, t_game *game)
-{
-	ray->player = game->map->player;
-	ray->plane.x = 0;
-	ray->plane.y = 0.66;
-	ray->x = 0;
-	ray->camerax = 0;
-	ray->raydir.x = 0;
-	ray->raydir.y = 0;
-	ray->mapx = 0;
-	ray->mapy = 0;
-	ray->deltadist.x = 0;
-	ray->deltadist.y = 0;
-	ray->sidedist.x = 0;
-	ray->sidedist.y = 0;
-	ray->hit = 0;
-	ray->stepx = 0;
-	ray->stepy = 0;
-	ray->side = 0;
-	ray->perpwalldist = 0;
-	ray->lineheight = 0;
-	ray->drawstart = 0;
-	ray->drawend = 0;
-}
-
 void	init_game(t_game *game)
 {
 	game->data = malloc(sizeof(t_data));
@@ -90,6 +65,5 @@ void	init_game(t_game *game)
 	game->ray = malloc(sizeof(t_ray));
 	if (!game->ray)
 		ft_exit_error(ERR_MALLOC);
-	init_ray(game->ray, game);
 	ft_init_textures(game);
 }

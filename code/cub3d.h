@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 16:32:54 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:39:41 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@
 # define PLAYER_COLOR 0x000000FF
 
 # define FOV 90
-# define NB_RAYS 100
-# define STEP_SIZE 0.5
+# define NB_RAYS 30
+# define STEP_SIZE 0.1
 # define RAY_LENGTH 35
-# define TEX_WIDTH 128
-# define TEX_HEIGHT 128
+# define TEX_WIDTH 32
+# define TEX_HEIGHT 32
 
 typedef struct s_position
 {
@@ -107,27 +107,6 @@ typedef struct s_player
 	t_position	*dir;
 }				t_player;
 
-typedef struct s_ray
-{
-	t_player	*player;
-	t_position	plane;
-	t_position	raydir;
-	double		camerax;
-	int			mapx;
-	int			mapy;
-	t_position	sidedist;
-	t_position	deltadist;
-	int			stepx;
-	int			stepy;
-	int			hit;
-	int			side;
-	double		perpwalldist;
-	int			lineheight;
-	int			drawstart;
-	int			drawend;
-	int			x;
-}				t_ray;
-
 typedef struct s_map
 {
 	char		**map;
@@ -136,11 +115,27 @@ typedef struct s_map
 	t_player	*player;
 }				t_map;
 
+typedef struct s_ray
+{
+	int			x;
+	double		ray_angle;
+	double		perp_wall_dist;
+	void		*image;
+	char		*image_data;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	int			texture_x;
+}				t_ray;
+
 typedef struct s_game
 {
 	t_map		*map;
-	t_ray		*ray;
 	t_data		*data;
+	t_ray		*ray;
 	t_mlx		*mlx;
 }				t_game;
 
@@ -184,5 +179,9 @@ void			draw_vision(t_game *game);
 void			draw_3d_projection(t_game *game);
 double			get_direction_x(double angle);
 double			get_direction_y(double angle);
+
+void			ft_rotate_player(t_game *game, double direction);
+void			ft_move_player(t_game *game, double move_speed);
+void			ft_strafe_player(t_game *game, double strafe_speed);
 
 #endif

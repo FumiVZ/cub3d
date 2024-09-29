@@ -6,32 +6,23 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/09/29 16:51:14 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:41:56 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-typedef struct s_raycasting
-{
-	int			x;
-	double		ray_angle;
-	double		perp_wall_dist;
-	void		*image;
-	char		*image_data;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
-}				t_raycasting;
-
 static int	get_texture_color(void *texture_ptr, int x, int y)
 {
-	int		color;
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
 	char	*pixel_data;
 
-	pixel_data = mlx_get_data_addr(texture_ptr, &color, &color, &color);
-	pixel_data += (y * TEX_WIDTH + x) * (color / 8);
-	return (*(unsigned int *)pixel_data);
+	pixel_data = mlx_get_data_addr(texture_ptr, &bits_per_pixel, &size_line,
+			&endian);
+	return (*(unsigned int *)(pixel_data + (y * size_line + x * (bits_per_pixel
+					/ 8))));
 }
 
 static double	calculate_perpendicular_wall_distance(t_game *game,
@@ -67,7 +58,8 @@ static void	draw_vertical_line(t_game *game, int x, int draw_start,
 	y = draw_start;
 	while (y < draw_end)
 	{
-		texture_y = (int)(((y - draw_start) * TEX_HEIGHT) / line_height);
+		texture_y = (int)(((double)(y - draw_start) / line_height)
+				* TEX_HEIGHT);
 		color = get_texture_color(game->data->wall.xpm_ptr, texture_x,
 				texture_y);
 		*(unsigned int *)(image_data + (y * WIDTH + (WIDTH - x - 1))
@@ -97,23 +89,32 @@ static void	render_3d_projection(t_game *game, int x,
 
 void	draw_3d_projection(t_game *game)
 {
-	t_raycasting	rc;
-
-	rc.image = mlx_new_image(game->mlx->mlx_ptr, WIDTH, HEIGHT);
-	rc.image_data = mlx_get_data_addr(rc.image, &rc.bits_per_pixel,
-			&rc.size_line, &rc.endian);
-	rc.x = 0;
-	while (rc.x < WIDTH)
+	game->ray->image = mlx_new_image(game->mlx->mlx_ptr, WIDTH, HEIGHT);
+	game->ray->image_data = mlx_get_data_addr(game->ray->image,
+			&game->ray->bits_per_pixel, &game->ray->size_line,
+			&game->ray->endian);
+	game->ray->x = 0;
+	while (game->ray->x < WIDTH)
 	{
-		rc.ray_angle = atan2(game->map->player->dir->y,
-				game->map->player->dir->x) * 180.0 / M_PI + FOV / 2.0 - rc.x
-			* FOV / WIDTH;
-		rc.perp_wall_dist = calculate_perpendicular_wall_distance(game,
-				rc.ray_angle);
-		render_3d_projection(game, rc.x, rc.perp_wall_dist, rc.image_data);
-		rc.x++;
+		game->ray->ray_angle = atan2(game->map->player->dir->y,
+				game->map->player->dir->x) * 180.0 / M_PI + FOV / 2.0
+			- game->ray->x * FOV / WIDTH;
+		game->ray->perp_wall_dist = calculate_perpendicular_wall_distance(game,
+				game->ray->ray_angle);
+		game->ray->line_height = (int)(HEIGHT / game->ray->perp_wall_dist);
+		game->ray->draw_start = -game->ray->line_height / 2 + HEIGHT / 2;
+		if (game->ray->draw_start < 0)
+			game->ray->draw_start = 0;
+		game->ray->draw_end = game->ray->line_height / 2 + HEIGHT / 2;
+		if (game->ray->draw_end >= HEIGHT)
+			game->ray->draw_end = HEIGHT - 1;
+		game->ray->texture_x = (int)(game->map->player->pos->x * TEX_WIDTH)
+			% TEX_WIDTH;
+		render_3d_projection(game, game->ray->x, game->ray->perp_wall_dist,
+			game->ray->image_data);
+		game->ray->x++;
 	}
-	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr, rc.image, 0,
-		0);
-	mlx_destroy_image(game->mlx->mlx_ptr, rc.image);
+	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr,
+		game->ray->image, 600, 0);
+	mlx_destroy_image(game->mlx->mlx_ptr, game->ray->image);
 }
