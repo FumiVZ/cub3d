@@ -3,134 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 17:58:09 by machrist          #+#    #+#             */
-/*   Updated: 2024/02/21 17:59:50 by machrist         ###   ########.fr       */
+/*   Created: 2023/12/01 13:50:02 by vzuccare          #+#    #+#             */
+/*   Updated: 2024/09/29 17:36:00 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <string.h>
 #include "gnl.h"
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+
+# ifndef BUFFER_SIZE
+# define BUFFER_SIZE 32
 #endif
 
-static int	polish_list(t_list **list)
+void	full_clean(char *str)
 {
-	t_list		*last_node;
-	t_list		*clean_node;
-	size_t		i;
-	size_t		j;
-	char		*buf;
+	size_t	i;
 
-	buf = malloc(BUFFER_SIZE + 1);
-	clean_node = malloc(sizeof(t_list));
-	if (!buf || !clean_node)
-	{
-		dealloc_list(list, clean_node, buf);
-		return (0);
-	}
-	last_node = find_last(*list);
+	i = 0;
+	while (str[i])
+		str[i++] = '\0';
+}
+
+void	clear_until_n(char *str)
+{
+	size_t	i;
+	size_t	j;
+
 	i = 0;
 	j = 0;
-	while (last_node && last_node->content[i] && last_node->content[i] != '\n')
-		++i;
-	while (last_node && last_node->content[i] && last_node->content[++i])
-		buf[j++] = last_node->content[i];
-	buf[j] = '\0';
-	clean_node->content = buf;
-	clean_node->next = NULL;
-	dealloc_list(list, clean_node, buf);
-	return (1);
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (str[i] == '\n')
+		i++;
+	while (str[i])
+		str[j++] = str[i++];
+	str[j] = '\0';
 }
 
-static char	*ft_get_line(t_list *list)
+char	*read_and_process_lines(int fd, char *buff, char *stash, int ret)
 {
-	size_t		str_len;
-	char		*line;
-
-	if (!list)
-		return (NULL);
-	str_len = len_to_newline(list);
-	line = malloc(str_len + 1);
-	if (!line)
-		return (NULL);
-	copy_str(list, line);
-	if (!line)
+	while (ret)
 	{
-		free(line);
-		return (NULL);
-	}
-	return (line);
-}
-
-static int	append(t_list **list, char *buf)
-{
-	t_list	*new;
-	t_list	*last;
-
-	last = find_last(*list);
-	new = malloc(sizeof(t_list));
-	if (!new)
-	{
-		free(buf);
-		return (0);
-	}
-	if (!last)
-		*list = new;
-	else
-		last->next = new;
-	new->content = buf;
-	new->next = NULL;
-	return (1);
-}
-
-static void	ft_create_list(t_list **list, int fd)
-{
-	long long		char_read;	
-	char			*buf;
-
-	while (!found_newline(*list))
-	{
-		buf = malloc(BUFFER_SIZE + 1);
-		if (!buf)
-			return (dealloc_list(list, NULL, NULL));
-		char_read = read(fd, buf, BUFFER_SIZE);
-		if (char_read == -1 || char_read == 0)
+		if (ft_strlen(stash) == 0)
 		{
-			if (char_read == -1)
-				dealloc_list(list, NULL, NULL);
-			return (free(buf));
+			ret = read(fd, stash, BUFFER_SIZE);
+			if (ret < 0)
+			{
+				free(buff);
+				return (NULL);
+			}
+			else if (ret == 0 && ft_strlen(stash) == 0)
+				return (buff);
+			else if (ret == 0 && ft_strlen(stash) != 0)
+				return (ft_strjoin_n(buff, stash));
+			if (ret != 0)
+				stash[ret] = '\0';
 		}
-		buf[char_read] = '\0';
-		if (!append(list, buf))
-			return (dealloc_list(list, NULL, NULL));
+		buff = ft_strjoin_n(buff, stash);
+		if (!buff)
+			return (NULL);
+		if (ft_strchr(buff, '\n'))
+			break ;
+		clear_until_n(stash);
 	}
+	return (buff);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list = NULL;
-	char			*line;
+	static char	stash[BUFFER_SIZE + 1];
+	char		*buff;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (read(fd, stash, 0))
 	{
-		dealloc_list(&list, NULL, NULL);
+		if (ft_strlen(stash) != 0)
+			full_clean(stash);
 		return (NULL);
 	}
-	ft_create_list(&list, fd);
-	if (!list)
-		return (NULL);
-	line = ft_get_line(list);
-	if (!line)
+	clear_until_n(stash);
+	buff = NULL;
+	buff = read_and_process_lines(fd, buff, stash, 1);
+	if (!buff)
 	{
-		dealloc_list(&list, NULL, NULL);
+		if (ft_strlen(stash) != 0)
+			full_clean(stash);
 		return (NULL);
 	}
-	if (!polish_list(&list) && line)
-	{
-		free(line);
-		return (NULL);
-	}
-	return (line);
+	return (buff);
 }
+

@@ -3,114 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   gnlu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 17:59:11 by machrist          #+#    #+#             */
-/*   Updated: 2024/02/21 17:59:29 by machrist         ###   ########.fr       */
+/*   Created: 2023/12/01 14:17:22 by vzuccare          #+#    #+#             */
+/*   Updated: 2024/09/29 17:40:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gnl.h"
 
-void	copy_str(t_list *list, char *str)
-{
-	size_t	i;
-	size_t	j;
-
-	if (!list)
-		return ;
-	j = 0;
-	while (list)
-	{
-		i = 0;
-		while (list->content[i])
-		{
-			if (list->content[i] == '\n')
-			{
-				str[j++] = '\n';
-				str[j] = '\0';
-				return ;
-			}
-			str[j++] = list->content[i++];
-		}
-		list = list->next;
-	}
-	str[j] = '\0';
-}
-
-size_t	len_to_newline(t_list *list)
-{
-	size_t	i;
-	size_t	len;
-
-	if (!list)
-		return (0);
-	len = 0;
-	while (list)
-	{
-		i = 0;
-		while (list->content[i])
-		{
-			if (list->content[i++] == '\n')
-				return (++len);
-			++len;
-		}
-		list = list->next;
-	}
-	return (len);
-}
-
-int	found_newline(t_list *list)
+size_t	len_line(char *str)
 {
 	size_t	i;
 
-	if (!list)
-		return (0);
-	while (list)
-	{
-		i = 0;
-		while (list->content[i])
-			if (list->content[i++] == '\n')
-				return (1);
-		list = list->next;
-	}
-	return (0);
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (str[i] == '\n')
+		i++;
+	return (i);
 }
 
-t_list	*find_last(t_list *list)
+char	*ft_strchr( const char *string, int searchedchar )
 {
-	if (!list)
-		return (NULL);
-	while (list->next)
-		list = list->next;
-	return (list);
+	size_t	i;
+
+	i = 0;
+	while (string[i])
+	{
+		if (string[i] == (char)searchedchar)
+			return ((char *)&string[i]);
+		i++;
+	}
+	if (string[i] == (char)searchedchar)
+		return ((char *)&string[i]);
+	if (searchedchar == '\0')
+		return ((char *)&string[i]);
+	return (NULL);
 }
 
-void	dealloc_list(t_list **list, t_list *clean_node, char *buf)
+char	*ft_strjoin_n(char *s1, char *s2)
 {
-	t_list	*tmp;
+	size_t	i;
+	size_t	size;
+	char	*str;
 
-	if (!*list)
-		return ;
-	while (*list)
+	i = 0;
+	size = ft_strlen(s1) + len_line((char *)s2) + 1;
+	str = malloc((size) * sizeof(char));
+	if (!str)
+		return (free(s1), NULL);
+	i = -1;
+	if (s1)
+		while (s1[++i])
+			str[i] = s1[i];
+	i = -1;
+	while (s2[++i] && s2[i] != '\n')
+		str[ft_strlen(s1) + i] = s2[i];
+	if (s2[i] == '\n')
 	{
-		tmp = (*list)->next;
-		free((*list)->content);
-		free(*list);
-		*list = tmp;
+		str[ft_strlen(s1) + i] = s2[i];
+		i++;
 	}
-	*list = NULL;
-	if (!clean_node && buf)
-		free(buf);
-	else if (clean_node && !buf)
-		free(clean_node);
-	else if (!clean_node && !buf)
-		return ;
-	else if (clean_node->content[0])
-		*list = clean_node;
-	else
-	{
-		free(buf);
-		free(clean_node);
-	}
+	str[ft_strlen(s1) + i] = '\0';
+	if (s1)
+		free(s1);
+	return (str);
 }

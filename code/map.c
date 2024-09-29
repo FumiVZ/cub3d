@@ -3,46 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 23:40:56 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:55:42 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-int	is_empty(char *line)
-{
-	size_t	i;
-
-	i = 0;
-	while (line[i] && is_space(line[i]))
-		i++;
-	if (!line[i])
-		return (1);
-	return (0);
-}
-
 bool	check_adjacent(char **map, size_t i, size_t j, char c)
 {
-	if (map[j - 1] && map[j - 1][i] == c)
+	if (j > 0 && map[j - 1][i] == c)
 		return (true);
-	if (map[j + 1] && map[j + 1][i] == c)
+	if (map[j + 1] != NULL && map[j + 1][i] == c)
 		return (true);
-	if (map[j][i - 1] && map[j][i - 1] == c)
+	if (i > 0 && map[j][i - 1] == c)
 		return (true);
-	if (map[j][i + 1] && map[j][i + 1] == c)
+	if (map[j][i + 1] != '\0' && map[j][i + 1] == c)
 		return (true);
 	return (false);
 }
 
 bool	check_zero(t_map *map)
 {
-	size_t	i;
-	size_t	j;
-
-	j = 0;
+	size_t i, j = 0;
 	while (map->map[j])
 	{
 		i = 0;
@@ -56,9 +41,10 @@ bool	check_zero(t_map *map)
 				map->player->dir->y = -1;
 				map->map[j][i] = '0';
 			}
-			if (map->map[j][i] == '0')
+			if (map->map[j][i] == '0' || map->map[j][i] == ' ')
 			{
-				if (j == 0 || j == map->map_y || i == 0 || i == map->map_x)
+				if (j == 0 || j == map->map_y - 1 || i == 0 || i == map->map_x
+					- 1)
 					return (false);
 				if (check_adjacent(map->map, i, j, ' ')
 					&& check_adjacent(map->map, i, j, '1'))
@@ -73,42 +59,65 @@ bool	check_zero(t_map *map)
 
 bool	is_space_or_one(char c)
 {
-	if (c == ' ' || c == '1' || c == '\n')
-		return (true);
-	return (false);
+	return (c == ' ' || c == '1' || c == '\n');
 }
 
-bool	is_correct_map(t_map *map)
+t_map	*fill_with_space(t_map *map, t_game *game)
 {
-	ssize_t	i;
-	ssize_t	j;
+	t_map	*new_map;
 
-	j = -1;
-	i = -1;
-	if (!map->map || !map->map[0] || !map->map[0][0])
-		return (false);
-	map->map_y--;
-	while (map->map[0][++i])
-		if (!is_space_or_one(map->map[0][i]))
-			return (false);
-	i = -1;
-	while (map->map[map->map_y][++i])
-		if (!is_space_or_one(map->map[map->map_y][i]))
-			return (false);
-	while (map->map[++j])
-		if (!is_space_or_one(map->map[j][0]))
-			return (false);
-	j = -1;
-	while (map->map[++j])
+	size_t x, y = 0;
+	new_map = malloc(sizeof(t_map));
+	if (!new_map)
+		return (NULL);
+	new_map->map = malloc(sizeof(char *) * (map->map_y + 1));
+	if (!new_map->map)
 	{
-		i = -1;
-		while (map->map[j][++i])
-			;
-		if (!is_space_or_one(map->map[j][i - 1]))
-			return (false);
+		free(new_map);
+		return (NULL);
 	}
-	return (check_zero(map));
+	new_map->player = map->player;
+		new_map->player = malloc(sizeof(t_player));
+	if (!new_map->player)
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	new_map->player->pos = malloc(sizeof(t_position));
+	if (!new_map->player->pos)
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	new_map->player->dir = malloc(sizeof(t_position));
+	if (!new_map->player->dir)
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	new_map->map_x = map->map_x;
+	new_map->map_y = map->map_y;
+	while (y < map->map_y)
+	{
+		new_map->map[y] = malloc(sizeof(char) * (map->map_x + 1));
+		if (!new_map->map[y])
+		{
+			for (size_t i = 0; i < y; i++)
+				free(new_map->map[i]);
+			free(new_map->map);
+			free(new_map);
+			return (NULL);
+		}
+		x = 0;
+		while (map->map[y][x])
+		{
+			new_map->map[y][x] = map->map[y][x];
+			x++;
+		}
+		while (x < map->map_x)
+		{
+			new_map->map[y][x] = ' ';
+			x++;
+		}
+		new_map->map[y][x] = '\0';
+		y++;
+	}
+	new_map->map[y] = NULL;
+	free_map(map);
+	return (new_map);
 }
+
 
 static char	*ft_strappend(char *s1, char *s2)
 {
@@ -116,7 +125,7 @@ static char	*ft_strappend(char *s1, char *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)ft_calloc((ft_strlen(s1) + ft_strlen(s2)) + 1, sizeof(char));
+	str = ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
 	if (!str)
 	{
 		free(s1);
@@ -126,35 +135,36 @@ static char	*ft_strappend(char *s1, char *s2)
 	ft_strlcpy(str, s1, ft_strlen(s1) + 1);
 	ft_strlcat(str, s2, ft_strlen(s1) + ft_strlen(s2) + 1);
 	free(s1);
+	free(s2);
 	return (str);
 }
 
-bool	check_map(t_map *map, int fd)
+bool	check_map(t_map **map, t_game *game, int *fd)
 {
-	char	*tmp;
-	char	*line;
+	char *tmp;
+	char *line;
 
-	if (!map)
+	if (!*map)
 		return (fprintf(stderr, "Map is NULL\n"), false);
 	tmp = ft_strdup("");
 	if (!tmp)
 		return (fprintf(stderr, "Malloc failed\n"), false);
-	map->map_x = 0;
+	(*map)->map_x = 0;
 	while (true)
 	{
-		line = get_next_line(fd);
+		line = get_next_line(*fd);
 		if (!line)
 			break ;
-		if (map->map_x < ft_strlen(line))
-			map->map_x = ft_strlen(line) - 1;
+		if ((*map)->map_x < ft_strlen(line))
+			(*map)->map_x = ft_strlen(line) - 1;
 		tmp = ft_strappend(tmp, line);
 		if (!tmp)
 			return (fprintf(stderr, "Malloc failed\n"), false);
-		free(line);
 	}
-	close(fd);
-	map->map = ft_split(tmp, '\n');
-	map->map_y = ft_strstrlen(map->map);
+	close(*fd);
+	(*map)->map = ft_split(tmp, '\n');
+	(*map)->map_y = ft_strstrlen((*map)->map);
+	*map = fill_with_space(*map, game);
 	free(tmp);
-	return (is_correct_map(map));
+	return (check_zero(*map));
 }

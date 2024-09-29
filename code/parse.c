@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 21:03:02 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:56:45 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,29 +89,29 @@ void	print_tab(char **tab)
 	}
 }
 
-void	parse_file(t_data *data, t_map *map, int fd)
+void	parse_file(t_game *game)
 {
 	size_t	i;
 	char	*line;
 
-	line = get_next_line(fd);
+	line = get_next_line(game->fd);
 	if (!line)
-		exit_close_msg(fd, ERR_MALLOC, NULL, NULL);
+		exit_close_msg(game->fd, ERR_MALLOC, game);
 	while (line)
 	{
 		i = 0;
 		while (line[i] && is_space(line[i]))
 			i++;
-		if (is_finished(data))
+		if (is_finished(game->data))
 			break ;
-		parse_textures(line, data, i);
+		parse_textures(line, game->data, i);
 		free(line);
-		line = get_next_line(fd);
+		line = get_next_line(game->fd);
 	}
-	if (!check_map(map, fd))
+	if (!check_map(&game->map, game, &game->fd))
 	{
 		free(line);
-		exit_close_msg(fd, ERR_PARSE, data, map);
+		exit_close_msg(game->fd, ERR_PARSE, game);
 	}
 	free(line);
 }

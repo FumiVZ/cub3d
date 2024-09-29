@@ -3,39 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 00:46:11 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:43:36 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static void	init_data(t_data *data)
+static void	init_data(t_game *game)
 {
-	data->no = NULL;
-	data->so = NULL;
-	data->we = NULL;
-	data->ea = NULL;
-	data->c = NULL;
-	data->f = NULL;
+	game->data->wall.xpm_ptr = NULL;
+	game->data->floor.xpm_ptr = NULL;
+	game->data->player.xpm_ptr = NULL;
+	game->data->no = NULL;
+	game->data->so = NULL;
+	game->data->we = NULL;
+	game->data->ea = NULL;
+	game->data->c = NULL;
+	game->data->f = NULL;
 }
 
-static void	init_map(t_map *map)
+static void	init_map(t_game *game)
 {
-	map->map = NULL;
-	map->map_x = 0;
-	map->map_y = 0;
-	map->player = malloc(sizeof(t_player));
-	if (!map->player)
-		ft_exit_error(ERR_MALLOC);
-	map->player->pos = malloc(sizeof(t_position));
-	if (!map->player->pos)
-		ft_exit_error(ERR_MALLOC);
-	map->player->dir = malloc(sizeof(t_position));
-	if (!map->player->dir)
-		ft_exit_error(ERR_MALLOC);
+	game->map->map = NULL;
+	game->map->map_x = 0;
+	game->map->map_y = 0;
+	game->map->player = malloc(sizeof(t_player));
+	if (!game->map->player)
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	game->map->player->pos = malloc(sizeof(t_position));
+	if (!game->map->player->pos)
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	game->map->player->dir = malloc(sizeof(t_position));
+	if (!game->map->player->dir)
+		exit_close_msg(game->fd, ERR_MALLOC, game);
 }
 
 static void	init_mlx(t_mlx *mlx)
@@ -73,16 +76,22 @@ static void	init_ray(t_ray *ray, t_game *game)
 	ray->drawend = 0;
 }
 
-void	init_game(t_game *game)
+void	init_game(t_game *game, char *name_file)
 {
+	game->fd = open(name_file, O_RDONLY);
+	if (game->fd == -1)
+		exit_close_msg(game->fd, ERR_OPEN, NULL);
 	game->data = malloc(sizeof(t_data));
 	if (!game->data)
-		ft_exit_error(ERR_MALLOC);
-	init_data(game->data);
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	init_data(game);
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
-		ft_exit_error(ERR_MALLOC);
-	init_map(game->map);
+		exit_close_msg(game->fd, ERR_MALLOC, game);
+	init_map(game);
+	parse_file(game);
+	if (check_parse(game->data))
+		exit_close_msg(game->fd, ERR_PARSE, game);
 	game->mlx = malloc(sizeof(t_mlx));
 	if (!game->mlx)
 		ft_exit_error(ERR_MALLOC);

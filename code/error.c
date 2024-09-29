@@ -3,24 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:52:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 19:42:29 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:26:32 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-void	exit_close_msg(int fd, char *msg, t_data *data, t_map *map)
+void	exit_close_msg(int fd, char *msg, t_game *game)
 {
-	close(fd);
-	(void)data;
-	(void)map;
-	// if (data)
-	// 	free_data(data);
-	// if (map)
-	// 	free_map(map);
+	ft_free_all(game);
+	if (fd != -1)
+		close(fd);
 	ft_putstr_fd(msg, 2);
 	exit(1);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   key.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:45:36 by machrist          #+#    #+#             */
-/*   Updated: 2024/09/29 00:47:08 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 15:58:05 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static void	ft_rotate_player(t_game *game, int direction)
+static void	ft_rotate_player(t_game *game, double direction)
 {
 	double	old_dir_x;
 	double	old_plane_x;
