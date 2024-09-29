@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 23:40:56 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:34:28 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ bool	check_zero(t_map *map)
 			{
 				map->player->pos->x = (double)i;
 				map->player->pos->y = (double)j;
-				map->player->dir->x = 0;
-				map->player->dir->y = -1;
+				map->player->dir->x = 1;
+				map->player->dir->y = 0;
 				map->map[j][i] = '0';
 			}
 			if (map->map[j][i] == '0')

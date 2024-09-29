@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 00:48:15 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:32:54 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 # define WALL_XPM "textures/wall.xpm"
 # define FLOOR_XPM "textures/floor.xpm"
 # define PLAYER_XPM "textures/player.xpm"
-# define HEIGHT 1080
-# define WIDTH 1080
+# define HEIGHT 800
+# define WIDTH 800
 
 # define ROTATE_LEFT 65361
 # define ROTATE_RIGHT 65363
@@ -47,7 +47,9 @@
 # define KEY_Q 113
 # define KEY_ESC 65307
 
-# define PI 3.14159265359
+# ifndef M_PI
+#  define M_PI 3.14159265359
+# endif
 # ifndef M_PI_2
 #  define M_PI_2 1.57079632679
 # endif
@@ -62,8 +64,10 @@
 
 # define FOV 90
 # define NB_RAYS 100
-# define STEP_SIZE 0.1
+# define STEP_SIZE 0.5
 # define RAY_LENGTH 35
+# define TEX_WIDTH 128
+# define TEX_HEIGHT 128
 
 typedef struct s_position
 {

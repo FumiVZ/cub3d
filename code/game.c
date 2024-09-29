@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/28 23:47:39 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:41:38 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	ft_render_map(t_game *game)
 	int	y;
 	int	x;
 
+	mlx_clear_window(game->mlx->mlx_ptr, game->mlx->win_ptr);
 	y = 0;
 	while (game->map->map[y])
 	{
