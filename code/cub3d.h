@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 17:39:41 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:22:16 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,29 +137,54 @@ typedef struct s_game
 	t_data		*data;
 	t_ray		*ray;
 	t_mlx		*mlx;
+	int			fd;
 }				t_game;
 
 //	===== @functions =====
 // error.c
-void			exit_close_msg(int fd, char *msg, t_data *data, t_map *map);
+void			exit_close_msg(int fd, char *msg, t_game *game);
 void			ft_exit_error(char *str);
 void			check_error(int ac, char **av);
 
+// free.c
+void			free_map(t_map *map);
+void			free_data(t_data *data, t_game *game);
+void			ft_free_all(t_game *game);
+int				ft_close_game(t_game *game);
+
+// game.c
+void			ft_init_textures(t_game *game);
+void			ft_render_texture(t_game *game, t_image texture, int line,
+					int column);
+int				ft_render_map(t_game *game);
+
+// init.c
+void			init_map(t_game *game, t_map *map);
+void			init_game(t_game *game, char *name_file);
+
+// key.c
+int				key_press(int keycode, t_game *game);
+
+// main.c
+void			start_game(t_game *game);
+
 // map.c
-int				is_empty(char *line);
-bool			check_zero(t_map *map);
-bool			is_space_or_one(char c);
-bool			is_correct_map(t_map *map);
-bool			check_map(t_map *map, int fd);
+bool			check_adjacent(char **map, size_t i, size_t j, char c);
+void			init_player(t_player **player, ssize_t x, ssize_t y, char c);
+bool			check_zero(t_map *map, ssize_t i, ssize_t j);
+t_map			*fill_with_space(t_map *map, t_game *game);
+bool			check_map(t_map **map, t_game *game, int *fd);
 
 // parse.c
-void			parse_res(char *line, t_data *data, size_t i);
 void			print_int_tab(int *tab);
 int				parse_textures(char *line, t_data *data, size_t i);
 int				check_parse(t_data *data);
 int				is_finished(t_data *data);
 void			print_tab(char **tab);
-void			parse_file(t_data *data, t_map *map, int fd);
+void			parse_file(t_game *game);
+
+// raycasting.c
+void			draw_3d_projection(t_game *game);
 
 // texture.c
 char			*data_texture(char *line, char *search, size_t i);
@@ -168,20 +193,13 @@ char			**erase_space(char **tab);
 int				*assign_color(char **tab, int *color);
 int				*parse_color(char *line, char *search, size_t i);
 
-int				ft_close_game(t_game *game);
-int				ft_render_map(t_game *game);
-int				key_press(int keycode, t_game *game);
-void			init_game(t_game *game);
-void			ft_init_textures(t_game *game);
-void			ft_render_texture(t_game *game, t_image texture, int line,
-					int column);
-void			draw_vision(t_game *game);
-void			draw_3d_projection(t_game *game);
+// vision.c
 double			get_direction_x(double angle);
 double			get_direction_y(double angle);
 
 void			ft_rotate_player(t_game *game, double direction);
 void			ft_move_player(t_game *game, double move_speed);
 void			ft_strafe_player(t_game *game, double strafe_speed);
+void			draw_vision(t_game *game);
 
 #endif

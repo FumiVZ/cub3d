@@ -3,25 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:35:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 00:46:21 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/29 16:37:42 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-void	start_game(t_game *game, char *name_file)
+void	start_game(t_game *game)
 {
-	int	fd;
-
-	fd = open(name_file, O_RDONLY);
-	if (fd == -1)
-		ft_exit_error(ERR_OPEN);
-	parse_file(game->data, game->map, fd);
-	if (check_parse(game->data))
-		exit_close_msg(fd, ERR_PARSE, game->data, game->map);
 	print_tab(game->map->map);
 	mlx_hook(game->mlx->win_ptr, KeyPress, KeyPressMask, key_press, game);
 	mlx_hook(game->mlx->win_ptr, Expose, ButtonPressMask, ft_render_map, game);
@@ -38,7 +30,11 @@ int	main(int ac, char **av)
 	if (!game)
 		ft_exit_error(ERR_MALLOC);
 	check_error(ac, av);
-	init_game(game);
-	start_game(game, av[1]);
+	game->map = NULL;
+	game->ray = NULL;
+	game->data = NULL;
+	game->mlx = NULL;
+	init_game(game, av[1]);
+	start_game(game);
 	return (0);
 }

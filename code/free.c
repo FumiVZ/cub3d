@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:07:21 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 17:40:41 by machrist         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:22:39 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static void	free_map(t_map *map)
+void	free_map(t_map *map)
 {
 	if (map)
 	{
@@ -62,10 +62,13 @@ void	ft_free_all(t_game *game)
 	free_data(game->data, game);
 	if (game->ray)
 		free(game->ray);
-	mlx_destroy_window(game->mlx->mlx_ptr, game->mlx->win_ptr);
-	mlx_destroy_display(game->mlx->mlx_ptr);
-	free(game->mlx->mlx_ptr);
-	free(game->mlx);
+	if (game->mlx)
+	{
+		mlx_destroy_window(game->mlx->mlx_ptr, game->mlx->win_ptr);
+		mlx_destroy_display(game->mlx->mlx_ptr);
+		free(game->mlx->mlx_ptr);
+		free(game->mlx);
+	}
 	free(game);
 }
 

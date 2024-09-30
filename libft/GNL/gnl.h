@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnl.h                                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 17:58:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/02/21 17:58:56 by machrist         ###   ########.fr       */
+/*   Created: 2023/12/01 13:52:08 by vzuccare          #+#    #+#             */
+/*   Updated: 2023/12/13 14:18:01 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GNL_H
-# define GNL_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
 # include <stdlib.h>
+# include <stdio.h>
 # include <unistd.h>
 
-typedef struct s_list
-{
-	char			*content;
-	struct s_list	*next;
-}				t_list;
-
 char	*get_next_line(int fd);
-int		found_newline(t_list *list);
-void	dealloc_list(t_list **list, t_list *clean_node, char *buf);
-size_t	len_to_newline(t_list *list);
-void	copy_str(t_list *list, char *str);
-t_list	*find_last(t_list *list);
+char	*ft_strdup_line(char *dst, char *src);
+char	*ft_strjoin_n(char *s1, char *s2);
+char	*ft_strchr( const char *string, int searchedChar );
+char	*strjoin_free(char *s1, char *s2);
+size_t	ft_strlen(const char *str);
+void	full_clean(char *str);
 
 #endif
