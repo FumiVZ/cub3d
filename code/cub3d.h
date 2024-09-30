@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 18:42:17 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/30 14:15:54 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,58 +143,60 @@ typedef struct s_game
 
 //	===== @functions =====
 // error.c
-void	exit_close_msg(int fd, char *msg, t_game *game);
-void	ft_exit_error(char *str);
-void	check_error(int ac, char **av);
+void			exit_close_msg(int fd, char *msg, t_game *game);
+void			ft_exit_error(char *str);
+void			check_error(int ac, char **av);
 
 // free.c
-void	free_map(t_map *map);
-void	free_data(t_data *data, t_game *game);
-void	ft_free_all(t_game *game);
-int	ft_close_game(t_game *game);
+void			free_map(t_map *map);
+void			free_data(t_data *data, t_game *game);
+void			ft_free_all(t_game *game);
+int				ft_close_game(t_game *game);
 
 // game.c
-void	ft_init_textures(t_game *game);
-void	ft_render_texture(t_game *game, t_image texture, int line,int column);
-int	ft_render_map(t_game *game);
+void			ft_init_textures(t_game *game);
+void			ft_render_texture(t_game *game, t_image texture, int line,
+					int column);
+int				ft_render_map(t_game *game);
 
 // init.c
-void	init_game(t_game *game, char *name_file);
+void			init_map(t_game *game, t_map *map);
+void			init_game(t_game *game, char *name_file);
 
 // key.c
-int	key_press(int keycode, t_game *game);
+int				key_press(int keycode, t_game *game);
 
 // main.c
-void	start_game(t_game *game);
+void			start_game(t_game *game);
 
 // map.c
-bool	check_adjacent(char **map, size_t i, size_t j, char c);
-bool	check_zero(t_map *map);
-bool	is_space_or_one(char c);
-t_map	*fill_with_space(t_map *map, t_game *game);
-bool	check_map(t_map **map, t_game *game, int *fd);
+bool			check_adjacent(char **map, size_t i, size_t j, char c);
+void			init_player(t_player **player, ssize_t x, ssize_t y, char c);
+bool			check_zero(t_map *map, ssize_t i, ssize_t j);
+t_map			*fill_with_space(t_map *map, t_game *game);
+bool			check_map(t_map **map, t_game *game, int *fd);
 
 // parse.c
-void	print_int_tab(int *tab);
-int	parse_textures(char *line, t_data *data, size_t i);
-int	check_parse(t_data *data);
-int	is_finished(t_data *data);
-void	print_tab(char **tab);
-void	parse_file(t_game *game);
+void			print_int_tab(int *tab);
+int				parse_textures(char *line, t_data *data, size_t i);
+int				check_parse(t_data *data);
+int				is_finished(t_data *data);
+void			print_tab(char **tab);
+void			parse_file(t_game *game);
 
 // raycasting.c
-void	draw_3d_projection(t_game *game);
+void			draw_3d_projection(t_game *game);
 
 // texture.c
-char	*data_texture(char *line, char *search, size_t i);
-bool	is_valid(char *str);
-char	**erase_space(char **tab);
-int	*assign_color(char **tab, int *color);
-int	*parse_color(char *line, char *search, size_t i);
+char			*data_texture(char *line, char *search, size_t i);
+bool			is_valid(char *str);
+char			**erase_space(char **tab);
+int				*assign_color(char **tab, int *color);
+int				*parse_color(char *line, char *search, size_t i);
 
 // vision.c
-double	get_direction_x(double angle);
-double	get_direction_y(double angle);
-void	draw_vision(t_game *game);
+double			get_direction_x(double angle);
+double			get_direction_y(double angle);
+void			draw_vision(t_game *game);
 
 #endif

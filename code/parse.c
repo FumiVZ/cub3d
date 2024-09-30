@@ -6,22 +6,11 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 18:56:45 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/30 14:42:55 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
-// void	parse_res(char *line, t_data *data, size_t i)
-// {
-// 	return ;
-// 	data->res_x = ft_atoi(line + i);
-// 	while (line[i] && ft_isdigit(line[i]))
-// 		i++;
-// 	while (line[i] && is_space(line[i]))
-// 		i++;
-// 	data->res_y = ft_atoi(line + i);
-// }
 
 void	print_int_tab(int *tab)
 {
@@ -37,8 +26,6 @@ void	print_int_tab(int *tab)
 
 int	parse_textures(char *line, t_data *data, size_t i)
 {
-	if (is_finished(data))
-		return (0);
 	if (!data->no && ft_strncmp(line + i, "NO", 2) && ft_strlen(line) > 2)
 		data->no = data_texture(line, "NO", i);
 	else if (!data->so && ft_strncmp(line + i, "SO", 2) && ft_strlen(line) > 2)
@@ -51,6 +38,10 @@ int	parse_textures(char *line, t_data *data, size_t i)
 		data->c = parse_color(line, "C", i);
 	else if (!data->f && ft_strncmp(line + i, "F", 1) && ft_strlen(line) > 1)
 		data->f = parse_color(line, "F", i);
+	else if (ft_strncmp(line + i, "NO", 2) || ft_strncmp(line + i, "SO", 2)
+		|| ft_strncmp(line + i, "WE", 2) || ft_strncmp(line + i, "EA", 2)
+		|| ft_strncmp(line + i, "C", 1) || ft_strncmp(line + i, "F", 1))
+		return (1);
 	return (0);
 }
 
@@ -104,7 +95,11 @@ void	parse_file(t_game *game)
 			i++;
 		if (is_finished(game->data))
 			break ;
-		parse_textures(line, game->data, i);
+		if (parse_textures(line, game->data, i))
+		{
+			free(line);
+			exit_close_msg(game->fd, ERR_PARSE, game);
+		}
 		free(line);
 		line = get_next_line(game->fd);
 	}

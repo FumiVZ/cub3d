@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 18:43:36 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/09/30 14:12:52 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,24 @@ static void	init_data(t_game *game)
 	game->data->f = NULL;
 }
 
-static void	init_map(t_game *game)
+void	init_map(t_game *game, t_map *map)
 {
-	game->map->map = NULL;
-	game->map->map_x = 0;
-	game->map->map_y = 0;
-	game->map->player = malloc(sizeof(t_player));
-	if (!game->map->player)
+	map->map = NULL;
+	map->map_x = 0;
+	map->map_y = 0;
+	map->player = malloc(sizeof(t_player));
+	if (!map->player)
 		exit_close_msg(game->fd, ERR_MALLOC, game);
-	game->map->player->pos = malloc(sizeof(t_position));
-	if (!game->map->player->pos)
+	map->player->pos = malloc(sizeof(t_position));
+	if (!map->player->pos)
 		exit_close_msg(game->fd, ERR_MALLOC, game);
-	game->map->player->dir = malloc(sizeof(t_position));
-	if (!game->map->player->dir)
+	map->player->dir = malloc(sizeof(t_position));
+	if (!map->player->dir)
 		exit_close_msg(game->fd, ERR_MALLOC, game);
+	map->player->pos->x = -1;
+	map->player->pos->y = -1;
+	map->player->dir->x = 0;
+	map->player->dir->y = 0;
 }
 
 static void	init_mlx(t_mlx *mlx)
@@ -88,7 +92,7 @@ void	init_game(t_game *game, char *name_file)
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
 		exit_close_msg(game->fd, ERR_MALLOC, game);
-	init_map(game);
+	init_map(game, game->map);
 	parse_file(game);
 	if (check_parse(game->data))
 		exit_close_msg(game->fd, ERR_PARSE, game);
