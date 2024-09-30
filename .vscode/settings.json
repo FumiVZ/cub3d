@@ -3,19 +3,6 @@
 		"strappend"
 	],
 	"files.associations": {
-		"errno.h": "c",
-		"cub3d.h": "c",
-		"mlx.h": "c",
-		"array": "c",
-		"string": "c",
-		"string_view": "c",
-		"*.tcc": "c",
-		"vector": "c",
-		"functional": "c",
-		"limits": "c",
-		"ostream": "c",
-		"streambuf": "c",
-		"tuple": "c",
-		"cmath": "c"
+		"cub3d.h": "c"
 	}
 }
