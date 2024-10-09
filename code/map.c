@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 17:29:17 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 17:54:13 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,69 +79,6 @@ bool	check_zero(t_map *map, ssize_t i, ssize_t j)
 	return (map->player->pos->x != -1);
 }
 
-t_map	*fill_with_space(t_map *map, t_game *game)
-{
-	t_map	*new_map;
-	ssize_t	x;
-	ssize_t	y;
-
-	x = -1;
-	y = -1;
-	new_map = malloc(sizeof(t_map));
-	if (!new_map)
-		return (NULL);
-	new_map->map = malloc(sizeof(char *) * (map->map_y + 1));
-	if (!new_map->map)
-	{
-		free(new_map);
-		return (NULL);
-	}
-	new_map->player = map->player;
-	new_map->player = malloc(sizeof(t_player));
-	if (!new_map->player)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
-	new_map->player->pos = malloc(sizeof(t_position));
-	if (!new_map->player->pos)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
-	new_map->player->dir = malloc(sizeof(t_position));
-	if (!new_map->player->dir)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
-	new_map->player->pos->x = -1;
-	new_map->player->pos->y = -1;
-	new_map->player->dir->x = 0;
-	new_map->player->dir->y = 0;
-	new_map->map_x = map->map_x;
-	new_map->map_y = map->map_y;
-	while (++y < (ssize_t)map->map_y)
-	{
-		new_map->map[y] = malloc(sizeof(char) * ((ssize_t)map->map_x + 1));
-		x = 0;
-		if (!new_map->map[y])
-		{
-			while (++x < y)
-				free(new_map->map[x]);
-			free(new_map->map);
-			free(new_map);
-			return (NULL);
-		}
-		x = 0;
-		while (map->map[y][x])
-		{
-			new_map->map[y][x] = map->map[y][x];
-			x++;
-		}
-		while (x < (ssize_t)map->map_x)
-		{
-			new_map->map[y][x] = ' ';
-			x++;
-		}
-		new_map->map[y][x] = '\0';
-	}
-	new_map->map[y] = NULL;
-	free_map(map);
-	return (new_map);
-}
-
 static char	*ft_strappend(char *s1, char *s2)
 {
 	char	*str;
@@ -184,10 +121,9 @@ bool	check_map(t_map **map, t_game *game, int *fd)
 		if (!tmp)
 			return (fprintf(stderr, "Malloc failed\n"), false);
 	}
-	close(*fd);
 	(*map)->map = ft_split(tmp, '\n');
 	(*map)->map_y = ft_strstrlen((*map)->map);
 	*map = fill_with_space(*map, game);
 	free(tmp);
-	return (check_zero(*map, -1, -1));
+	return (close(*fd), check_zero(*map, -1, -1));
 }
