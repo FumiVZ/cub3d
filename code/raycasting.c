@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/09/30 15:53:35 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 16:39:01 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ static void	draw_vertical_line(t_game *game, int x, int draw_start,
 
 	line_height = draw_end - draw_start;
 	y = draw_start;
+	(void)texture_x;
+	(void)image_data;
+	(void)game;
 	while (y < draw_end)
 	{
 		texture_y = (int)(((double)(y - draw_start) / line_height)
@@ -93,6 +96,7 @@ void	draw_3d_projection(t_game *game)
 	game->ray->image_data = mlx_get_data_addr(game->ray->image,
 			&game->ray->bits_per_pixel, &game->ray->size_line,
 			&game->ray->endian);
+	floor_cell(game);
 	game->ray->x = 0;
 	while (game->ray->x < WIDTH)
 	{

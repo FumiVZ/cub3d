@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/30 16:00:05 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 15:44:22 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@
 # define BACK_S_S 115
 # define RIGHT_D_D 100
 # define LEFT_A_Q 97
+# define KEY_W 122
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_A 97
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
 
 # define KEY_Q 113
 # define KEY_ESC 65307
@@ -68,6 +74,8 @@
 # define RAY_LENGTH 35
 # define TEX_WIDTH 32
 # define TEX_HEIGHT 32
+# define ROTATE_SPEED 0.1
+# define MOVE_SPEED 0.1
 
 typedef struct s_position
 {
@@ -145,6 +153,9 @@ typedef struct s_game
 void			exit_close_msg(int fd, char *msg, t_game *game);
 void			ft_exit_error(char *str);
 void			check_error(int ac, char **av);
+
+// floor_cell.c
+void			floor_cell(t_game *game);
 
 // free.c
 void			free_map(t_map *map);
