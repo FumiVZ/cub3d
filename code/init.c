@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/30 15:59:35 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 17:58:58 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void	init_map(t_game *game, t_map *map)
 	map->map_y = 0;
 	map->player = malloc(sizeof(t_player));
 	if (!map->player)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	map->player->pos = malloc(sizeof(t_position));
 	if (!map->player->pos)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	map->player->dir = malloc(sizeof(t_position));
 	if (!map->player->dir)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	map->player->pos->x = -1;
 	map->player->pos->y = -1;
 	map->player->dir->x = 0;
@@ -59,18 +59,21 @@ void	init_game(t_game *game, char *name_file)
 {
 	game->fd = open(name_file, O_RDONLY);
 	if (game->fd == -1)
-		exit_close_msg(game->fd, ERR_OPEN, NULL);
+	{
+		free(game);
+		ft_exit_error(ERR_OPEN);
+	}
 	game->data = malloc(sizeof(t_data));
 	if (!game->data)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	init_data(game);
 	game->map = malloc(sizeof(t_map));
 	if (!game->map)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	init_map(game, game->map);
 	parse_file(game);
 	if (check_parse(game->data))
-		exit_close_msg(game->fd, ERR_PARSE, game);
+		exit_close_msg(game->fd, ERR_PARSE, game, NULL);
 	game->mlx = malloc(sizeof(t_mlx));
 	if (!game->mlx)
 		ft_exit_error(ERR_MALLOC);

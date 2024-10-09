@@ -6,14 +6,16 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:52:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 16:26:32 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 17:56:30 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-void	exit_close_msg(int fd, char *msg, t_game *game)
+void	exit_close_msg(int fd, char *msg, t_game *game, char *line)
 {
+	if (line)
+		free(line);
 	ft_free_all(game);
 	if (fd != -1)
 		close(fd);

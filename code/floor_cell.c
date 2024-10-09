@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:41:50 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 15:44:53 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 18:05:48 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ int	attribute_rgb(int *color)
 
 void	floor_cell(t_game *game)
 {
-	int x;
-	int y;
-	int pixel_index; 	
-	int color;
+	int	x;
+	int	y;
+	int	pixel_index;
+	int	color;
 
 	y = -1;
 	while (++y < HEIGHT)

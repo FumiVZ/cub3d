@@ -6,23 +6,11 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/08 17:00:20 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 18:00:12 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
-void	print_int_tab(int *tab)
-{
-	size_t	i;
-
-	i = 0;
-	while (tab[i] != -1)
-	{
-		printf("%d\n", tab[i]);
-		i++;
-	}
-}
 
 int	parse_textures(char *line, t_data *data, size_t i)
 {
@@ -92,7 +80,7 @@ void	parse_file(t_game *game)
 
 	line = get_next_line(game->fd);
 	if (!line)
-		exit_close_msg(game->fd, ERR_MALLOC, game);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	while (line)
 	{
 		i = 0;
@@ -101,17 +89,11 @@ void	parse_file(t_game *game)
 		if (is_finished(game->data))
 			break ;
 		if (parse_textures(line, game->data, i))
-		{
-			free(line);
-			exit_close_msg(game->fd, ERR_PARSE, game);
-		}
+			exit_close_msg(game->fd, ERR_PARSE, game, line);
 		free(line);
 		line = get_next_line(game->fd);
 	}
 	if (!check_map(&game->map, game, &game->fd))
-	{
-		free(line);
-		exit_close_msg(game->fd, ERR_PARSE, game);
-	}
+		exit_close_msg(game->fd, ERR_PARSE, game, line);
 	free(line);
 }

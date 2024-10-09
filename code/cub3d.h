@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 15:44:22 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 17:56:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,11 +150,15 @@ typedef struct s_game
 
 //	===== @functions =====
 // error.c
-void			exit_close_msg(int fd, char *msg, t_game *game);
+void			exit_close_msg(int fd, char *msg, t_game *game, char *line);
 void			ft_exit_error(char *str);
 void			check_error(int ac, char **av);
 
+// fill_space.c
+t_map			*fill_with_space(t_map *map, t_game *game);
+
 // floor_cell.c
+int				attribute_rgb(int *color);
 void			floor_cell(t_game *game);
 
 // free.c
@@ -183,7 +187,6 @@ void			start_game(t_game *game);
 bool			check_adjacent(char **map, size_t i, size_t j, char c);
 void			init_player(t_player **player, ssize_t x, ssize_t y, char c);
 bool			check_zero(t_map *map, ssize_t i, ssize_t j);
-t_map			*fill_with_space(t_map *map, t_game *game);
 bool			check_map(t_map **map, t_game *game, int *fd);
 
 // movement.c
@@ -192,7 +195,6 @@ void			ft_move_player(t_game *game, double move_speed);
 void			ft_strafe_player(t_game *game, double strafe_speed);
 
 // parse.c
-void			print_int_tab(int *tab);
 int				parse_textures(char *line, t_data *data, size_t i);
 int				check_parse(t_data *data);
 int				is_finished(t_data *data);
