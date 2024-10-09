@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/30 14:35:26 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/09 17:29:17 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ bool	check_adjacent(char **map, size_t i, size_t j, char c)
 {
 	if ((j > 0 && map[j - 1][i] == c) || (!map[j + 1] && map[j + 1][i] == c)
 		|| (i > 0 && map[j][i - 1] == c) || (!map[j][i + 1] && map[j][i
-			+ 1] == c))
+			+ 1] == c) || (map[j - 1][i - 1] && map[j - 1][i - 1] == c)
+		|| (map[j + 1][i + 1] && map[j + 1][i + 1] == c) || (map[j - 1][i + 1]
+			&& map[j - 1][i + 1] == c) || (map[j + 1][i - 1] && map[j + 1][i
+			- 1] == c))
 		return (true);
 	return (false);
 }

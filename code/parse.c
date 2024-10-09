@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/30 14:42:55 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/08 17:00:20 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,22 @@ void	print_int_tab(int *tab)
 
 int	parse_textures(char *line, t_data *data, size_t i)
 {
-	if (!data->no && ft_strncmp(line + i, "NO", 2) && ft_strlen(line) > 2)
+	if (!data->no && ft_strncmp(line + i, "NO", 2) == 0 && ft_strlen(line) > 2)
 		data->no = data_texture(line, "NO", i);
-	else if (!data->so && ft_strncmp(line + i, "SO", 2) && ft_strlen(line) > 2)
+	else if (!data->so && ft_strncmp(line + i, "SO", 2) == 0
+		&& ft_strlen(line) > 2)
 		data->so = data_texture(line, "SO", i);
-	else if (!data->we && ft_strncmp(line + i, "WE", 2) && ft_strlen(line) > 2)
+	else if (!data->we && ft_strncmp(line + i, "WE", 2) == 0
+		&& ft_strlen(line) > 2)
 		data->we = data_texture(line, "WE", i);
-	else if (!data->ea && ft_strncmp(line + i, "EA", 2) && ft_strlen(line) > 2)
+	else if (!data->ea && ft_strncmp(line + i, "EA", 2) == 0
+		&& ft_strlen(line) > 2)
 		data->ea = data_texture(line, "EA", i);
-	else if (!data->c && ft_strncmp(line + i, "C", 1) && ft_strlen(line) > 1)
+	else if (!data->c && ft_strncmp(line + i, "C", 1) == 0
+		&& ft_strlen(line) > 1)
 		data->c = parse_color(line, "C", i);
-	else if (!data->f && ft_strncmp(line + i, "F", 1) && ft_strlen(line) > 1)
+	else if (!data->f && ft_strncmp(line + i, "F", 1) == 0
+		&& ft_strlen(line) > 1)
 		data->f = parse_color(line, "F", i);
 	else if (ft_strncmp(line + i, "NO", 2) || ft_strncmp(line + i, "SO", 2)
 		|| ft_strncmp(line + i, "WE", 2) || ft_strncmp(line + i, "EA", 2)
