@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 17:58:58 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/15 17:03:24 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void	init_game(t_game *game, char *name_file)
 		exit_close_msg(game->fd, ERR_PARSE, game, NULL);
 	game->mlx = malloc(sizeof(t_mlx));
 	if (!game->mlx)
-		ft_exit_error(ERR_MALLOC);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	init_mlx(game->mlx);
 	game->ray = malloc(sizeof(t_ray));
 	if (!game->ray)
-		ft_exit_error(ERR_MALLOC);
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	ft_init_textures(game);
 }

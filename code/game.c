@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 17:28:09 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/15 16:48:48 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,14 @@ static t_image	ft_new_texture(void *mlx, char *path, t_game *game)
 void	ft_init_textures(t_game *game)
 {
 	game->data->wall = ft_new_texture(game->mlx->mlx_ptr, WALL_XPM, game);
+	if (!game->data->wall.xpm_ptr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
 	game->data->floor = ft_new_texture(game->mlx->mlx_ptr, FLOOR_XPM, game);
+	if (!game->data->floor.xpm_ptr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
 	game->data->player = ft_new_texture(game->mlx->mlx_ptr, PLAYER_XPM, game);
+	if (!game->data->player.xpm_ptr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
 }
 
 void	ft_render_texture(t_game *game, t_image texture, int line, int column)

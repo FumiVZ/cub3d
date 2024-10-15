@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:35:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 17:28:23 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/15 16:21:06 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	main(int ac, char **av)
 {
 	t_game	*game;
 
+	check_error(ac, av);
 	game = malloc(sizeof(t_game));
 	if (!game)
 		ft_exit_error(ERR_MALLOC);
-	check_error(ac, av);
 	game->map = NULL;
 	game->ray = NULL;
 	game->data = NULL;

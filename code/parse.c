@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 18:00:12 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/15 16:41:13 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,25 @@ int	parse_textures(char *line, t_data *data, size_t i)
 
 int	check_parse(t_data *data)
 {
+	const char *files[] = {data->no, data->so, data->we, data->ea};
+	int	fd;
+	int	i;
+
+	i = 0;
 	if (!data->no || !data->so || !data->we || !data->ea || !data->c
 		|| !data->f)
 		return (1);
-	if (open(data->no, O_RDONLY) == -1)
-		return (1);
-	if (open(data->so, O_RDONLY) == -1)
-		return (1);
-	if (open(data->we, O_RDONLY) == -1)
-		return (1);
-	if (open(data->ea, O_RDONLY) == -1)
-		return (1);
+	while (i < 4)
+	{
+		fd = open(files[i], O_RDONLY);
+		if (fd == -1)
+		{
+			fprintf(stderr, "file %s not found\n", files[i]);
+			return (1);
+		}
+		close(fd);
+		i++;
+	}
 	return (0);
 }
 
