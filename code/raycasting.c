@@ -6,119 +6,114 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/09 18:12:15 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/26 17:28:21 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static int	get_texture_color(void *texture_ptr, int x, int y)
+void	ft_init_textures(t_game *game)
 {
-	int		bits_per_pixel;
-	int		size_line;
-	int		endian;
-	char	*pixel_data;
-
-	pixel_data = mlx_get_data_addr(texture_ptr, &bits_per_pixel, &size_line,
-			&endian);
-	return (*(unsigned int *)(pixel_data + (y * size_line + x * (bits_per_pixel
-					/ 8))));
+	game->data->wall = ft_new_texture(game->mlx->mlx_ptr, WALL_XPM, game);
+	if (!game->data->wall.xpm_ptr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
+	game->data->floor = ft_new_texture(game->mlx->mlx_ptr, FLOOR_XPM, game);
+	if (!game->data->floor.xpm_ptr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
+	game->data->player = ft_new_texture(game->mlx->mlx_ptr, PLAYER_XPM, game);
+	if (!game->data->player.xpm_ptr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
 }
 
-static double	calculate_perpendicular_wall_distance(t_game *game,
-		double ray_angle)
+void put_pixel(t_game *game, int x, int y, int color)
 {
-	double	ray_x;
-	double	ray_y;
-	double	distance;
+	char	*dst;
 
-	ray_x = game->map->player->pos->x;
-	ray_y = game->map->player->pos->y;
-	distance = 0;
-	while (distance < RAY_LENGTH)
-	{
-		ray_x += get_direction_x(ray_angle) * STEP_SIZE;
-		ray_y += get_direction_y(ray_angle) * STEP_SIZE;
-		if (game->map->map[(int)ray_y][(int)ray_x] == '1')
-			break ;
-		distance += STEP_SIZE;
-	}
-	return (distance);
+	dst = game->mlx->addr + (y * game->mlx->line_length + x
+			* (game->mlx->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
 }
 
-static void	draw_vertical_line(t_game *game, int x, int draw_start,
-		int draw_end, int texture_x, char *image_data)
+static float	fish_eye_correction(float player_x, float player_y, float ray_x,
+		float ray_y, t_game *game)
 {
+	float	x;
+	float	y;
+	float	dist;
+	float	angle;
+
+	x = ray_x - player_x;
+	y = ray_y - player_y;
+	angle = atan2(y, x) - game->map->player->angle;
+	dist = get_dist(x, y) * cos(angle);
+	return (dist);
+}
+
+bool	wall_touch(float player_x, float player_y, t_game *game)
+{
+	int	x;
 	int	y;
-	int	texture_y;
+
+	x = player_x / 32;
+	y = player_y / 32;
+	if (game->map->map[y][x] == '1')
+		return (true);
+	return (false);
+}
+
+int	get_texture_color(t_game *game, double texture_offset, int tex_x)
+{
+	int	tex_y;
 	int	color;
-	int	line_height;
 
-	line_height = draw_end - draw_start;
-	y = draw_start;
-	(void)texture_x;
-	(void)image_data;
-	(void)game;
-	while (y < draw_end)
-	{
-		texture_y = (int)(((double)(y - draw_start) / line_height)
-				* TEX_HEIGHT);
-		color = get_texture_color(game->data->wall.xpm_ptr, texture_x,
-				texture_y);
-		*(unsigned int *)(image_data + (y * WIDTH + (WIDTH - x - 1))
-				* 4) = color;
-		y++;
-	}
+	tex_y = (int)texture_offset;
+	if (tex_x < 0)
+		tex_x = 0;
+	if (tex_x >= 32)
+		tex_x = 32 - 1;
+	if (tex_y < 0)
+		tex_y = 0;
+	if (tex_y >= 32)
+		tex_y = 32 - 1;
+	color = *(int *)(game->data->addr + (tex_y * game->data->size_line + tex_x
+				* (game->data->bits_per_pixel / 8)));
+	return (color);
 }
 
-static void	render_3d_projection(t_game *game, int x,
-		double perpendicular_wall_distance, char *image_data)
+void	draw_line(t_game *game, float start_x, int i)
 {
-	int	line_height;
-	int	draw_start;
-	int	draw_end;
-	int	texture_x;
+	t_ray	*ray;
+	int		y;
+	double	texture_offset;
+	int		tex_x;
 
-	line_height = (int)(HEIGHT / perpendicular_wall_distance);
-	draw_start = -line_height / 2 + HEIGHT / 2;
-	if (draw_start < 0)
-		draw_start = 0;
-	draw_end = line_height / 2 + HEIGHT / 2;
-	if (draw_end >= HEIGHT)
-		draw_end = HEIGHT - 1;
-	texture_x = (int)(game->map->player->pos->x * TEX_WIDTH) % TEX_WIDTH;
-	draw_vertical_line(game, x, draw_start, draw_end, texture_x, image_data);
-}
-
-void	draw_3d_projection(t_game *game)
-{
-	game->ray->image = mlx_new_image(game->mlx->mlx_ptr, WIDTH, HEIGHT);
-	game->ray->image_data = mlx_get_data_addr(game->ray->image,
-			&game->ray->bits_per_pixel, &game->ray->size_line,
-			&game->ray->endian);
-	floor_cell(game);
-	game->ray->x = 0;
-	while (game->ray->x < WIDTH)
+	ray = game->ray;
+	ray->cos_angle = cos(start_x);
+	ray->sin_angle = sin(start_x);
+	ray->x = game->map->player->pos->x;
+	ray->y = game->map->player->pos->y;
+	while (!wall_touch(ray->x, ray->y, game))
 	{
-		game->ray->ray_angle = atan2(game->map->player->dir->y,
-				game->map->player->dir->x) * 180.0 / M_PI + FOV / 2.0
-			- game->ray->x * FOV / WIDTH;
-		game->ray->perp_wall_dist = calculate_perpendicular_wall_distance(game,
-				game->ray->ray_angle);
-		game->ray->line_height = (int)(HEIGHT / game->ray->perp_wall_dist);
-		game->ray->draw_start = -game->ray->line_height / 2 + HEIGHT / 2;
-		if (game->ray->draw_start < 0)
-			game->ray->draw_start = 0;
-		game->ray->draw_end = game->ray->line_height / 2 + HEIGHT / 2;
-		if (game->ray->draw_end >= HEIGHT)
-			game->ray->draw_end = HEIGHT - 1;
-		game->ray->texture_x = (int)(game->map->player->pos->x * TEX_WIDTH)
-			% TEX_WIDTH;
-		render_3d_projection(game, game->ray->x, game->ray->perp_wall_dist,
-			game->ray->image_data);
-		game->ray->x++;
+		ray->x += ray->cos_angle;
+		ray->y += ray->sin_angle;
 	}
-	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr,
-		game->ray->image, 600, 0);
-	mlx_destroy_image(game->mlx->mlx_ptr, game->ray->image);
+	ray->dist = fish_eye_correction(game->map->player->pos->x,
+			game->map->player->pos->y, ray->x, ray->y, game);
+	ray->line_height = (int)((32 / ray->dist) * (WIDTH / 2));
+	ray->draw_start = (HEIGHT - ray->line_height) / 2;
+	ray->draw_end = ray->draw_start + ray->line_height;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	if (ray->draw_end >= HEIGHT)
+		ray->draw_end = HEIGHT - 1;
+	y = ray->draw_start - 1;
+	while (++y < ray->draw_end)
+	{
+		texture_offset = ((y - ray->draw_start) * TEX_HEIGHT)
+			/ ray->line_height;
+		tex_x = i % TEX_WIDTH;
+		game->ray->texture_color = get_texture_color(game,
+				texture_offset, tex_x);
+		put_pixel(game, i, y, game->ray->texture_color);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 17:54:13 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/26 14:55:07 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,37 @@ bool	check_adjacent(char **map, size_t i, size_t j, char c)
 
 void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
 {
-	(*player)->pos->x = x;
-	(*player)->pos->y = y;
+	(*player)->up = false;
+	(*player)->down = false;
+	(*player)->right = false;
+	(*player)->left = false;
+	(*player)->rotate_left = false;
+	(*player)->rotate_right = false;
+	(*player)->pos->x = x * 32;
+	(*player)->pos->y = y * 32;
 	if (c == 'N')
 	{
 		(*player)->dir->x = 0;
 		(*player)->dir->y = -1;
+		(*player)->angle = 3 * PI / 2;
 	}
 	else if (c == 'S')
 	{
 		(*player)->dir->x = 0;
 		(*player)->dir->y = 1;
+		(*player)->angle = PI / 2;
 	}
 	else if (c == 'E')
 	{
 		(*player)->dir->x = 1;
 		(*player)->dir->y = 0;
+		(*player)->angle = PI;
 	}
 	else if (c == 'W')
 	{
 		(*player)->dir->x = -1;
 		(*player)->dir->y = 0;
+		(*player)->angle = 0;
 	}
 }
 

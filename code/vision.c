@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 23:44:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/09/30 15:54:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/25 14:45:58 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ double	get_direction_y(double angle)
 	return (sin(angle * M_PI / 180.0));
 }
 
-static int	coordinate_to_pixel(double coordinate)
+/* static int	coordinate_to_pixel(double coordinate)
 {
 	return ((int)(coordinate * TILE_SIZE));
 }
@@ -46,9 +46,9 @@ static void	render_ray(t_game *game, double angle)
 			coordinate_to_pixel(ray_x), coordinate_to_pixel(ray_y), 0x00FF00);
 		t += STEP_SIZE;
 	}
-}
+} */
 
-void	draw_vision(t_game *game)
+/* void	draw_vision(t_game *game)
 {
 	int		i;
 	double	angle;
@@ -65,3 +65,4 @@ void	draw_vision(t_game *game)
 	}
 	draw_3d_projection(game);
 }
+ */
