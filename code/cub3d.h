@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/09 17:56:43 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/26 17:27:46 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,19 @@
 # define KEY_A 97
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
+# define MINIMAP_SCALE 0.5
 
 # define KEY_Q 113
 # define KEY_ESC 65307
 
-# ifndef M_PI
-#  define M_PI 3.14159265359
-# endif
-# ifndef M_PI_2
-#  define M_PI_2 1.57079632679
-# endif
-# ifndef M_PI_3
-#  define M_PI_3 4.71238898038
-# endif
-
+#  define PI 3.14159265359
 # define TILE_SIZE 32
 # define WALL_COLOR 0x00FF0000
 # define FLOOR_COLOR 0x0000FF00
 # define PLAYER_COLOR 0x000000FF
 
 # define FOV 90
-# define NB_RAYS 30
+# define NB_RAYS 360
 # define STEP_SIZE 0.1
 # define RAY_LENGTH 35
 # define TEX_WIDTH 32
@@ -77,16 +69,41 @@
 # define ROTATE_SPEED 0.1
 # define MOVE_SPEED 0.1
 
+enum			e_texture
+{
+	NORTH,
+	SOUTH,
+	WEST,
+	EAST
+};
+
 typedef struct s_position
 {
 	double		x;
 	double		y;
 }				t_position;
 
+typedef struct s_texture
+{
+	void		*img;
+	int			width;
+	int			height;
+	char		*addr;
+	int			bpp;
+	int			line_len;
+	int			endian;
+	char		*path;
+}				t_texture;
+
 typedef struct s_mlx
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
+	void		*img_ptr;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
 }				t_mlx;
 
 typedef struct s_image
@@ -104,6 +121,12 @@ typedef struct s_data
 	char		*ea;
 	int			*f;
 	int			*c;
+	int 		bits_per_pixel;
+	int			size_line;
+	int			endian;
+	int			width;
+	int			height;
+	void		*addr;
 	t_image		wall;
 	t_image		floor;
 	t_image		player;
@@ -113,6 +136,13 @@ typedef struct s_player
 {
 	t_position	*pos;
 	t_position	*dir;
+	double		angle;
+	bool		up;
+	bool		down;
+	bool		left;
+	bool		right;
+	bool		rotate_left;
+	bool		rotate_right;
 }				t_player;
 
 typedef struct s_map
@@ -125,9 +155,11 @@ typedef struct s_map
 
 typedef struct s_ray
 {
-	int			x;
-	double		ray_angle;
-	double		perp_wall_dist;
+	double		x;
+	double		y;
+	double		cos_angle;
+	double		sin_angle;
+	double		dist;
 	void		*image;
 	char		*image_data;
 	int			bits_per_pixel;
@@ -136,7 +168,7 @@ typedef struct s_ray
 	int			line_height;
 	int			draw_start;
 	int			draw_end;
-	int			texture_x;
+	int			texture_color;
 }				t_ray;
 
 typedef struct s_game
@@ -145,75 +177,81 @@ typedef struct s_game
 	t_data		*data;
 	t_ray		*ray;
 	t_mlx		*mlx;
+	t_texture	*wall_t[4];
 	int			fd;
 }				t_game;
 
 //	===== @functions =====
 // error.c
-void			exit_close_msg(int fd, char *msg, t_game *game, char *line);
-void			ft_exit_error(char *str);
-void			check_error(int ac, char **av);
+void	exit_close_msg(int fd, char *msg, t_game *game, char *line);
+void	ft_exit_error(char *str);
+void	check_error(int ac, char **av);
 
 // fill_space.c
-t_map			*fill_with_space(t_map *map, t_game *game);
+t_map	*fill_with_space(t_map *map, t_game *game);
 
 // floor_cell.c
-int				attribute_rgb(int *color);
-void			floor_cell(t_game *game);
+int	attribute_rgb(int *color);
+void	floor_cell(t_game *game);
 
 // free.c
-void			free_map(t_map *map);
-void			free_data(t_data *data, t_game *game);
-void			ft_free_all(t_game *game);
-int				ft_close_game(t_game *game);
-
-// game.c
-void			ft_init_textures(t_game *game);
-void			ft_render_texture(t_game *game, t_image texture, int line,
-					int column);
-int				ft_render_map(t_game *game);
+void	free_map(t_map *map);
+void	free_data(t_data *data, t_game *game);
+void	ft_free_all(t_game *game);
+int	ft_close_game(t_game *game);
 
 // init.c
-void			init_map(t_game *game, t_map *map);
-void			init_game(t_game *game, char *name_file);
+void	init_map(t_game *game, t_map *map);
+void	init_game(t_game *game, char *name_file);
 
 // key.c
-int				key_press(int keycode, t_game *game);
+int	key_press(int keycode, t_game *game);
+int	key_release(int keycode, t_game *game);
 
 // main.c
-void			start_game(t_game *game);
+void	start_game(t_game *game);
 
 // map.c
-bool			check_adjacent(char **map, size_t i, size_t j, char c);
-void			init_player(t_player **player, ssize_t x, ssize_t y, char c);
-bool			check_zero(t_map *map, ssize_t i, ssize_t j);
-bool			check_map(t_map **map, t_game *game, int *fd);
+bool	check_adjacent(char **map, size_t i, size_t j, char c);
+void	init_player(t_player **player, ssize_t x, ssize_t y, char c);
+bool	check_zero(t_map *map, ssize_t i, ssize_t j);
+bool	check_map(t_map **map, t_game *game, int *fd);
+
+// minimap.c
+t_image	ft_new_texture(void *mlx, char *path, t_game *game);
+void	draw_square(int x, int y, int color, int size, t_game *game);
+void	draw_mini_map(t_game *game);
+float	get_dist(float x, float y);
+int	ft_render_map(t_game *game);
 
 // movement.c
-void			ft_rotate_player(t_game *game, double direction);
-void			ft_move_player(t_game *game, double move_speed);
-void			ft_strafe_player(t_game *game, double strafe_speed);
+bool	check_collision(t_game *game, float dir_x, float dir_y);
+void	ft_up_and_down(t_game *game, double speed);
+void	ft_strafe_player(t_game *game, double speed);
+void	ft_move_player(t_game *game);
 
 // parse.c
-int				parse_textures(char *line, t_data *data, size_t i);
-int				check_parse(t_data *data);
-int				is_finished(t_data *data);
-void			print_tab(char **tab);
-void			parse_file(t_game *game);
+int	parse_textures(char *line, t_data *data, size_t i);
+int	check_parse(t_data *data);
+int	is_finished(t_data *data);
+void	print_tab(char **tab);
+void	parse_file(t_game *game);
 
 // raycasting.c
-void			draw_3d_projection(t_game *game);
+void	put_pixel(t_game *game, int x, int y, int color);
+void	ft_init_textures(t_game *game);
+bool	wall_touch(float player_x, float player_y, t_game *game);
+void	draw_line(t_game *game, float start_x, int i);
 
 // texture.c
-char			*data_texture(char *line, char *search, size_t i);
-bool			is_valid(char *str);
-char			**erase_space(char **tab);
-int				*assign_color(char **tab, int *color);
-int				*parse_color(char *line, char *search, size_t i);
+char	*data_texture(char *line, char *search, size_t i);
+bool	is_valid(char *str);
+char	**erase_space(char **tab);
+int	*assign_color(char **tab, int *color);
+int	*parse_color(char *line, char *search, size_t i);
 
 // vision.c
-double			get_direction_x(double angle);
-double			get_direction_y(double angle);
-void			draw_vision(t_game *game);
+double	get_direction_x(double angle);
+double	get_direction_y(double angle);
 
 #endif
