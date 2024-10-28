@@ -1,4 +1,5 @@
 /* XPM */
+<<<<<<< HEAD
 static char *_6f39a07e8084c90f7aaacade1361707bS89kighmmKdfXQW[] = {
 /* columns rows colors chars-per-pixel */
 "128 128 64 1 ",
@@ -196,3 +197,46 @@ static char *_6f39a07e8084c90f7aaacade1361707bS89kighmmKdfXQW[] = {
 "297e9gw2eueeei2eeuweweee9ewwwewwwe9w77>77w7r77w>76#7e494-,*>-%->498>-;>>>42>>2-2>2<222>2-2>ee22722222922>-22242r2229>CCDB7222922",
 "729>pieweiuhue0eieewewewu9e2u77wewewwww7w777w277r727799-4>,>,>>->$7>*>-$8-,>9>2>>2>72222>222222>t$22222292,2922299,28nSDV227r-22"
 };
+=======
+static char *result[] = {
+/* columns rows colors chars-per-pixel */
+"32 32 4 1 ",
+"  c #013319",
+". c #025926",
+"X c #038033",
+"o c #04A640",
+/* pixels */
+"                                ",
+" ...........................   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .XXXXXXXXXXXXXXXXXXXXXXXo.   ",
+" .ooooooooooooooooooooooo..   ",
+"                                "
+};
+>>>>>>> ma-nouvelle-branche

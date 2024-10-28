@@ -1,6 +1,7 @@
 /* XPM */
 static char *result[] = {
 /* columns rows colors chars-per-pixel */
+<<<<<<< HEAD
 "32 32 9 1 ",
 "  c #29366F",
 ". c #257179",
@@ -44,4 +45,43 @@ static char *result[] = {
 "$$$$$$$$$$$#oX#$$#.X#$$$$$$$$$$$",
 "$$$$$$$$$$$$###$$###$$$$$$$$$$$$",
 "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+=======
+"32 32 3 1 ",
+"  c #170A01",
+". c #231107",
+"X c #2C170A",
+/* pixels */
+"                                ",
+"..XXXXX... XXXXXXXXXXXXXXXXXXXX ",
+".XXXXXXXXX XXXXXXXXXXXXXXXXXXXX ",
+".XXXXXXXXX XXXXXXXXXXXXXXXXXXX. ",
+".....XXXXX XXXXXXXXXXXXXX...... ",
+"                                ",
+"               ......XXXXXXXX...",
+"               XXXXXXXXXXXXX....",
+"               XXXXXXXXXXXX.....",
+"               .XXXXXXXXX.......",
+"                                ",
+"... ...XXXXXXXXXXXXXXXX     ... ",
+"... XXXXXXXXXXXXXXXX...      ...",
+"... XXXXXXXXXXXX.......       ..",
+"... XXXXXXXXXXXXXXXXXX.      .. ",
+"                                ",
+"                                ",
+"                   XXXXXXXXXXXX.",
+"                   XXXXXXXXXXX..",
+"                   XXXXXXXXXXX..",
+"                 . XXXXXXXXX....",
+"                                ",
+"....... XXXXXXXXXXXXXXXX....... ",
+"....... XXXXXXXXXXXXXXXXXXXXXXX ",
+"....... XXXXXXXXXXXXXXXXXXXXXXX ",
+"....... ......XXXXXXXXXXXXXXXXX ",
+"                                ",
+" ...........       .....        ",
+" ...........                    ",
+" ...........                    ",
+" ........... ..            .    ",
+"                                "
+>>>>>>> ma-nouvelle-branche
 };
