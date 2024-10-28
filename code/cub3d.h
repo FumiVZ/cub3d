@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/26 17:27:46 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/28 14:22:54 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,15 @@
 
 # define KEY_Q 113
 # define KEY_ESC 65307
-
 #  define PI 3.14159265359
 # define TILE_SIZE 32
 # define WALL_COLOR 0x00FF0000
 # define FLOOR_COLOR 0x0000FF00
 # define PLAYER_COLOR 0x000000FF
 
-# define FOV 90
-# define NB_RAYS 360
+# define FOV 60.0;
+# define HALF_FOV 30.0;
+# define NB_RAYS 800
 # define STEP_SIZE 0.1
 # define RAY_LENGTH 35
 # define TEX_WIDTH 32
@@ -157,6 +157,7 @@ typedef struct s_ray
 {
 	double		x;
 	double		y;
+	int			side;
 	double		cos_angle;
 	double		sin_angle;
 	double		dist;
@@ -218,7 +219,7 @@ bool	check_zero(t_map *map, ssize_t i, ssize_t j);
 bool	check_map(t_map **map, t_game *game, int *fd);
 
 // minimap.c
-t_image	ft_new_texture(void *mlx, char *path, t_game *game);
+t_texture*ft_new_texture(void *mlx, char *path, t_texture *tex, t_game *game);
 void	draw_square(int x, int y, int color, int size, t_game *game);
 void	draw_mini_map(t_game *game);
 float	get_dist(float x, float y);
@@ -238,9 +239,11 @@ void	print_tab(char **tab);
 void	parse_file(t_game *game);
 
 // raycasting.c
-void	put_pixel(t_game *game, int x, int y, int color);
 void	ft_init_textures(t_game *game);
+void	put_pixel(t_game *game, int x, int y, int color);
+float	normalize_angle(float angle);
 bool	wall_touch(float player_x, float player_y, t_game *game);
+int	get_texture_color(t_texture *texture, double texture_offset, int tex_x);
 void	draw_line(t_game *game, float start_x, int i);
 
 // texture.c
