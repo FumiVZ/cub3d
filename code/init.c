@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/26 17:13:18 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/28 18:41:40 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ static void	init_wall_textures(t_texture *tex, t_game *game, int i)
 	tex->bpp = 0;
 	tex->line_len = 0;
 	tex->endian = 0;
-	tex->img = mlx_new_image(game->mlx->mlx_ptr, 64, 64);
+	
+	// Charger d'abord l'image XPM
+	tex->img = mlx_xpm_file_to_image(game->mlx->mlx_ptr, tex->path, 
+		&tex->width, &tex->height);
 	if (!tex->img)
 		exit_close_msg(game->fd, ERR_MLX, game, NULL);
-	mlx_xpm_file_to_image(game->mlx->mlx_ptr, tex->path, &tex->width,
-		&tex->height);	
+		
+	// Puis obtenir son adresse
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
 			&tex->endian);
 	if (!tex->addr)
@@ -97,11 +100,30 @@ static void	init_mlx(t_mlx *mlx)
 	}
 }
 
-void	init_game(t_game *game, char *name_file)
+static void	init_wall_textures_array(t_game *game)
 {
 	int	i;
 
 	i = -1;
+	while (++i < 4)
+	{
+		game->wall_t[i] = malloc(sizeof(t_texture));
+		if (!game->wall_t[i])
+			exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
+		init_wall_textures(game->wall_t[i], game, i);
+	}
+}
+
+static void	init_mlx_components(t_game *game)
+{
+	game->mlx = malloc(sizeof(t_mlx));
+	if (!game->mlx)
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
+	init_mlx(game->mlx);
+}
+
+void	init_game(t_game *game, char *name_file)
+{
 	game->fd = open(name_file, O_RDONLY);
 	if (game->fd == -1)
 	{
@@ -119,24 +141,8 @@ void	init_game(t_game *game, char *name_file)
 	parse_file(game);
 	if (check_parse(game->data))
 		exit_close_msg(game->fd, ERR_PARSE, game, NULL);
-	game->mlx = malloc(sizeof(t_mlx));
-	if (!game->mlx)
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	init_mlx(game->mlx);
-	game->wall_t[0] = malloc(sizeof(t_texture));
-	if (!game->wall_t[0])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	game->wall_t[1] = malloc(sizeof(t_texture));
-	if (!game->wall_t[1])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	game->wall_t[2] = malloc(sizeof(t_texture));
-	if (!game->wall_t[2])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	game->wall_t[3] = malloc(sizeof(t_texture));
-	if (!game->wall_t[3])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	while (++i < 4)
-		init_wall_textures(game->wall_t[i], game, i);
+	init_mlx_components(game);
+	init_wall_textures_array(game);
 	game->ray = malloc(sizeof(t_ray));
 	if (!game->ray)
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
