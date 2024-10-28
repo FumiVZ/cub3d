@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/28 18:47:45 by machrist         ###   ########.fr       */
+/*   Updated: 2024/10/28 19:18:35 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,75 +185,77 @@ typedef struct s_game
 
 //	===== @functions =====
 // error.c
-void			exit_close_msg(int fd, char *msg, t_game *game, char *line);
-void			ft_exit_error(char *str);
-void			check_error(int ac, char **av);
+void	exit_close_msg(int fd, char *msg, t_game *game, char *line);
+void	ft_exit_error(char *str);
+void	check_error(int ac, char **av);
 
 // fill_space.c
-t_map			*fill_with_space(t_map *map, t_game *game);
+t_map	*fill_with_space(t_map *map, t_game *game);
 
 // floor_cell.c
-int				attribute_rgb(int *color);
-void			floor_cell(t_game *game);
+int	attribute_rgb(int *color);
+void	floor_cell(t_game *game);
 
 // free.c
-void			free_map(t_map *map);
-void			free_data(t_data *data, t_game *game);
-void			ft_free_all(t_game *game);
-int				ft_close_game(t_game *game);
+void	free_map(t_map *map);
+void	free_data(t_data *data, t_game *game);
+void	ft_free_all(t_game *game);
+int	ft_close_game(t_game *game);
 
 // init.c
-void			init_map(t_game *game, t_map *map);
-void			init_game(t_game *game, char *name_file);
+void	init_map(t_game *game, t_map *map);
+void	init_game(t_game *game, char *name_file);
 
 // key.c
-int				key_press(int keycode, t_game *game);
-int				key_release(int keycode, t_game *game);
+int	key_press(int keycode, t_game *game);
+int	key_release(int keycode, t_game *game);
 
 // main.c
-void			start_game(t_game *game);
+void	start_game(t_game *game);
 
 // map.c
-bool			check_adjacent(char **map, size_t i, size_t j, char c);
-void			init_player(t_player **player, ssize_t x, ssize_t y, char c);
-bool			check_zero(t_map *map, ssize_t i, ssize_t j);
-bool			check_map(t_map **map, t_game *game, int *fd);
+bool	check_adjacent(char **map, size_t i, size_t j, char c);
+void	init_player(t_player **player, ssize_t x, ssize_t y, char c);
+bool	check_zero(t_map *map, ssize_t i, ssize_t j);
+bool	check_map(t_map **map, t_game *game, int *fd);
 
 // minimap.c
-t_image	ft_new_texture(void *mlx, char *path, t_game *game);
+t_texture*ft_new_texture(void *mlx, char *path, t_texture *tex, t_game *game);
 void	draw_square(int x, int y, int color, int size, t_game *game);
 void	draw_mini_map(t_game *game);
 float	get_dist(float x, float y);
 int	ft_render_map(t_game *game);
 
 // movement.c
-bool			check_collision(t_game *game, float dir_x, float dir_y);
-void			ft_up_and_down(t_game *game, double speed);
-void			ft_strafe_player(t_game *game, double speed);
-void			ft_move_player(t_game *game);
+bool	check_collision(t_game *game, float dir_x, float dir_y);
+void	ft_up_and_down(t_game *game, double speed);
+void	ft_strafe_player(t_game *game, double speed);
+void	ft_move_player(t_game *game);
 
 // parse.c
-int				parse_textures(char *line, t_data *data, size_t i);
-int				check_parse(t_data *data);
-int				is_finished(t_data *data);
-void			print_tab(char **tab);
-void			parse_file(t_game *game);
+int	parse_textures(char *line, t_data *data, size_t i);
+int	check_parse(t_data *data);
+int	is_finished(t_data *data);
+void	print_tab(char **tab);
+void	parse_file(t_game *game);
 
 // raycasting.c
-void	put_pixel(t_game *game, int x, int y, int color);
 void	ft_init_textures(t_game *game);
+void	put_pixel(t_game *game, int x, int y, int color);
+float	normalize_angle(float angle);
 bool	wall_touch(float player_x, float player_y, t_game *game);
+int	get_texture_color(t_texture *tex, double texture_offset, int tex_x);
 void	draw_line(t_game *game, float start_x, int i);
 
 // texture.c
-char			*data_texture(char *line, char *search, size_t i);
-bool			is_valid(char *str);
-char			**erase_space(char **tab);
-int				*assign_color(char **tab, int *color);
-int				*parse_color(char *line, char *search, size_t i);
+char	*data_texture(char *line, char *search, size_t i);
+bool	is_valid(char *str);
+char	**erase_space(char **tab);
+int	*assign_color(char **tab, int *color);
+int	*parse_color(char *line, char *search, size_t i);
 
 // vision.c
-double			get_direction_x(double angle);
-double			get_direction_y(double angle);
+double	get_direction_x(double angle);
+double	get_direction_y(double angle);
 
 #endif
