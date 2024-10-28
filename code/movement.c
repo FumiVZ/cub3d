@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:27:18 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/25 19:56:19 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/28 18:25:42 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	ft_move_player(t_game *game)
 	double		speed;
 	float		rot_speed;
 
-	speed = 0.3;
+	speed = 1;
 	rot_speed = 0.05;
 	player = game->map->player;
 	if (player->rotate_left)
