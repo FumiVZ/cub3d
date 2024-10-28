@@ -6,25 +6,22 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/26 17:26:31 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/28 14:42:15 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-t_image	ft_new_texture(void *mlx, char *path, t_game *game)
+t_texture *ft_new_texture(void *mlx, char *path, t_texture *tex, t_game *game)
 {
-	t_image	texture;
-
-	texture.xpm_ptr = mlx_xpm_file_to_image(mlx, path, &texture.x, &texture.y);
-	if (!texture.xpm_ptr)
-	{
-		ft_printf_fd(2, "Error: Failed to load %s\n", path);
-		ft_close_game(game);
-	}
-	game->data->addr = mlx_get_data_addr(texture.xpm_ptr, &game->data->bits_per_pixel,
-			&game->data->size_line, &game->data->endian);
-	return (texture);
+	tex->img = mlx_xpm_file_to_image(mlx, path, &tex->width, &tex->height);
+	if (!tex->img)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp,
+			&tex->line_len, &tex->endian);
+	if (!tex->addr)
+		exit_close_msg(game->fd, ERR_MLX, game, NULL);
+	return (tex);
 }
 
 static void	clear_window(t_game *game)
@@ -94,12 +91,16 @@ int	ft_render_map(t_game *game)
 	float	frac;
 	float	start;
 	int		i;
+	float	fov_angle;
+	float	half_fov;
 
+	fov_angle = PI / 3;
+	half_fov = fov_angle / 2;
 	ft_move_player(game);
 	clear_window(game);
 	floor_cell(game);
-	frac = PI / 3 / WIDTH;
-	start = game->map->player->angle - PI / 6;
+	frac = fov_angle / WIDTH;
+	start = game->map->player->angle - half_fov;
 	i = -1;
 	while (++i < WIDTH)
 	{
