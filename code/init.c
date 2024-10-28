@@ -3,42 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/28 18:48:07 by machrist         ###   ########.fr       */
+/*   Updated: 2024/10/28 19:18:54 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static void	init_wall_textures(t_texture *tex, t_game *game, int i)
-{
-	if (i == 0)
-		tex->path = game->data->no;
-	else if (i == 1)
-		tex->path = game->data->so;
-	else if (i == 2)
-		tex->path = game->data->we;
-	else if (i == 3)
-		tex->path = game->data->ea;
-	tex->addr = NULL;
-	tex->img = NULL;
-	tex->width = 0;
-	tex->height = 0;
-	tex->bpp = 0;
-	tex->line_len = 0;
-	tex->endian = 0;
-	tex->img = mlx_new_image(game->mlx->mlx_ptr, 64, 64);
-	if (!tex->img)
-		exit_close_msg(game->fd, ERR_MLX, game, NULL);
-	mlx_xpm_file_to_image(game->mlx->mlx_ptr, tex->path, &tex->width,
-		&tex->height);	
-	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
-			&tex->endian);
-	if (!tex->addr)
-		exit_close_msg(game->fd, ERR_MLX, game, NULL);
-}
 
 static void	init_data(t_game *game)
 {
@@ -97,27 +70,6 @@ static void	init_mlx(t_mlx *mlx)
 	}
 }
 
-static void	init_wall_textures_array(t_game *game)
-{
-	int	i;
-
-	i = -1;
-	while (++i < 4)
-	{
-		game->wall_t[i] = malloc(sizeof(t_texture));
-		if (!game->wall_t[i])
-			exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-		init_wall_textures(game->wall_t[i], game, i);
-	}
-}
-
-static void	init_mlx_components(t_game *game)
-{
-	game->mlx = malloc(sizeof(t_mlx));
-	if (!game->mlx)
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	init_mlx(game->mlx);
-}
 
 void	init_game(t_game *game, char *name_file)
 {
@@ -154,8 +106,6 @@ void	init_game(t_game *game, char *name_file)
 	game->wall_t[3] = malloc(sizeof(t_texture));
 	if (!game->wall_t[3])
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	while (++i < 4)
-		init_wall_textures(game->wall_t[i], game, i);
 	game->ray = malloc(sizeof(t_ray));
 	if (!game->ray)
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
