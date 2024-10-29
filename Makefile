@@ -5,7 +5,7 @@ BUILD_DIR = build
 SRCS_DIR = code/
 HEADERS = $(addprefix $(SRCS_DIR), cub3d.h)
 
-SRC = $(addprefix $(SRCS_DIR), free.c init.c main.c  parse.c texture.c error.c  minimap.c  key.c map.c raycasting.c movement.c floor_cell.c fill_space.c ray_utils.c)
+SRC = $(addprefix $(SRCS_DIR), free.c init.c main.c  parse.c texture.c error.c  minimap.c  key.c map.c raycasting.c parse_utils.c movement.c floor_cell.c fill_space.c ray_utils.c)
 
 LIBFT = libft.a
 LIBMLX = libmlx.a

@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:17:18 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 18:26:46 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_player_rot(t_player **player, char c)
 	{
 		(*player)->dir->x = 0;
 		(*player)->dir->y = -1;
-		(*player)->angle = 3 * PI / 2;
+		(*player)->angle = PI * 3 / 2;
 	}
 	else if (c == 'S')
 	{
@@ -30,13 +30,13 @@ void	init_player_rot(t_player **player, char c)
 	{
 		(*player)->dir->x = 1;
 		(*player)->dir->y = 0;
-		(*player)->angle = PI;
+		(*player)->angle = 0;
 	}
 	else if (c == 'W')
 	{
 		(*player)->dir->x = -1;
 		(*player)->dir->y = 0;
-		(*player)->angle = 0;
+		(*player)->angle = PI;
 	}
 }
 
@@ -48,8 +48,8 @@ void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
 	(*player)->left = false;
 	(*player)->rotate_left = false;
 	(*player)->rotate_right = false;
-	(*player)->pos->x = x * 32;
-	(*player)->pos->y = y * 32;
+	(*player)->pos->x = x * 32 + 16;
+	(*player)->pos->y = y * 32 + 16;
 	init_player_rot(player, c);
 }
 
