@@ -6,11 +6,16 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:02:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:39:54 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 17:53:34 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+
+float	get_dist(float x, float y)
+{
+	return (sqrt(x * x + y * y));
+}
 
 int	get_texture_color(t_texture *tex, double texture_offset, int tex_x)
 {
