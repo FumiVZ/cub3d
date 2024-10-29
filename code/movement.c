@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:27:18 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/29 17:53:28 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 18:17:59 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static float	check_point(t_game *game, float new_x, float new_y, float angle)
 	float	check_x;
 	float	check_y;
 
-	check_x = new_x + cos(angle) * 5.0;
-	check_y = new_y + sin(angle) * 5.0;
+	check_x = new_x + cos(angle) * 3.0;
+	check_y = new_y + sin(angle) * 3.0;
 	map_x = (int)(check_x / TILE_SIZE);
 	map_y = (int)(check_y / TILE_SIZE);
 	if (map_x >= game->map->map_x || map_y >= game->map->map_y
