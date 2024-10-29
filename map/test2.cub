@@ -1,7 +1,7 @@
 	NO ./textures/north.xpm
            SO ./textures/south.xpm
 WE ./textures/west.xpm
-EA 	./textures/east.xpm
+EA 	./textures/花瓣网-G游麟网，游戏学习交流，游戏学习交流，游戏资源下载，游戏美术制作，3D模型，2D原画插画-CG游戏资源-CG游戏交流-Powered-by-Discuz_.xpm
 		C	 135, 206, 250
    F 			  			50,   205,     50
    
@@ -15,7 +15,7 @@ EA 	./textures/east.xpm
 10000000N00000011111111111
 1000000010000011
 100000000000001
-100000100000001111
+100000000000001111
 100000010000001
 100000000000001
 1111111111111111
