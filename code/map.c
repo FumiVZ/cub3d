@@ -6,34 +6,14 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/26 14:55:07 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 11:17:18 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-bool	check_adjacent(char **map, size_t i, size_t j, char c)
+void	init_player_rot(t_player **player, char c)
 {
-	if ((j > 0 && map[j - 1][i] == c) || (!map[j + 1] && map[j + 1][i] == c)
-		|| (i > 0 && map[j][i - 1] == c) || (!map[j][i + 1] && map[j][i
-			+ 1] == c) || (map[j - 1][i - 1] && map[j - 1][i - 1] == c)
-		|| (map[j + 1][i + 1] && map[j + 1][i + 1] == c) || (map[j - 1][i + 1]
-			&& map[j - 1][i + 1] == c) || (map[j + 1][i - 1] && map[j + 1][i
-			- 1] == c))
-		return (true);
-	return (false);
-}
-
-void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
-{
-	(*player)->up = false;
-	(*player)->down = false;
-	(*player)->right = false;
-	(*player)->left = false;
-	(*player)->rotate_left = false;
-	(*player)->rotate_right = false;
-	(*player)->pos->x = x * 32;
-	(*player)->pos->y = y * 32;
 	if (c == 'N')
 	{
 		(*player)->dir->x = 0;
@@ -58,6 +38,19 @@ void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
 		(*player)->dir->y = 0;
 		(*player)->angle = 0;
 	}
+}
+
+void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
+{
+	(*player)->up = false;
+	(*player)->down = false;
+	(*player)->right = false;
+	(*player)->left = false;
+	(*player)->rotate_left = false;
+	(*player)->rotate_right = false;
+	(*player)->pos->x = x * 32;
+	(*player)->pos->y = y * 32;
+	init_player_rot(player, c);
 }
 
 bool	check_zero(t_map *map, ssize_t i, ssize_t j)

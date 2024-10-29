@@ -6,19 +6,11 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:45:36 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/25 16:51:51 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 11:15:20 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
-/* static void	ft_handle_rotation(int keycode, t_game *game)
-{
-	if (keycode == ROTATE_LEFT)
-		ft_rotate_player(game, -1.1);
-	else if (keycode == ROTATE_RIGHT)
-		ft_rotate_player(game, 1.1);
-} */
 
 int	key_press(int keycode, t_game *game)
 {

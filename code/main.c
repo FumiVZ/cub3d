@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:35:08 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/26 15:09:04 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 11:17:35 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	start_game(t_game *game)
 {
-	print_tab(game->map->map);
 	mlx_hook(game->mlx->win_ptr, 2, 1L << 0, key_press, game);
 	mlx_hook(game->mlx->win_ptr, 3, 1L << 1, key_release, game);
 	mlx_hook(game->mlx->win_ptr, DestroyNotify, ButtonPressMask, ft_close_game,

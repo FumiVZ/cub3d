@@ -6,11 +6,23 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/15 16:41:13 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 11:18:39 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+
+bool	check_adjacent(char **map, size_t i, size_t j, char c)
+{
+	if ((j > 0 && map[j - 1][i] == c) || (!map[j + 1] && map[j + 1][i] == c)
+		|| (i > 0 && map[j][i - 1] == c) || (!map[j][i + 1] && map[j][i
+			+ 1] == c) || (map[j - 1][i - 1] && map[j - 1][i - 1] == c)
+		|| (map[j + 1][i + 1] && map[j + 1][i + 1] == c) || (map[j - 1][i + 1]
+			&& map[j - 1][i + 1] == c) || (map[j + 1][i - 1] && map[j + 1][i
+			- 1] == c))
+		return (true);
+	return (false);
+}
 
 int	parse_textures(char *line, t_data *data, size_t i)
 {
@@ -40,9 +52,9 @@ int	parse_textures(char *line, t_data *data, size_t i)
 
 int	check_parse(t_data *data)
 {
-	const char *files[] = {data->no, data->so, data->we, data->ea};
-	int	fd;
-	int	i;
+	const char	*files[] = {data->no, data->so, data->we, data->ea};
+	int			fd;
+	int			i;
 
 	i = 0;
 	if (!data->no || !data->so || !data->we || !data->ea || !data->c
@@ -67,18 +79,6 @@ int	is_finished(t_data *data)
 	if (data->no && data->so && data->we && data->ea && data->c && data->f)
 		return (1);
 	return (0);
-}
-
-void	print_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		fprintf(stderr, "%s\n", tab[i]);
-		i++;
-	}
 }
 
 void	parse_file(t_game *game)

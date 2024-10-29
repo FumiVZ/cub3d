@@ -6,12 +6,11 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/28 19:18:54 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 11:34:36 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-
 
 static void	init_data(t_game *game)
 {
@@ -46,30 +45,29 @@ void	init_map(t_game *game, t_map *map)
 	map->player->dir->y = 0;
 }
 
-static void	init_mlx(t_mlx *mlx)
+static void	init_mlx(t_mlx *mlx, t_game *game)
 {
 	mlx->mlx_ptr = mlx_init();
 	if (!mlx->mlx_ptr)
-		exit_close_msg(0, ERR_MLX, NULL, NULL);
+		exit_close_msg(0, ERR_MLX, game, NULL);
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIDTH, HEIGHT, "Cub3D");
 	if (!mlx->win_ptr)
-		exit_close_msg(0, ERR_MLX, NULL, NULL);
+		exit_close_msg(0, ERR_MLX, game, NULL);
 	mlx->img_ptr = mlx_new_image(mlx->mlx_ptr, WIDTH, HEIGHT);
 	if (!mlx->img_ptr)
 	{
 		fprintf(stderr, "Error: Failed to create image\n");
 		mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
-		exit_close_msg(0, ERR_MLX, NULL, NULL);
+		exit_close_msg(0, ERR_MLX, game, NULL);
 	}
 	mlx->addr = mlx_get_data_addr(mlx->img_ptr, &mlx->bits_per_pixel,
 			&mlx->line_length, &mlx->endian);
 	if (!mlx->addr)
 	{
 		fprintf(stderr, "Error: Failed to get image address\n");
-		exit_close_msg(0, ERR_MLX, NULL, NULL);
+		exit_close_msg(0, ERR_MLX, game, NULL);
 	}
 }
-
 
 void	init_game(t_game *game, char *name_file)
 {
@@ -93,19 +91,7 @@ void	init_game(t_game *game, char *name_file)
 	game->mlx = malloc(sizeof(t_mlx));
 	if (!game->mlx)
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	init_mlx(game->mlx);
-	game->wall_t[0] = malloc(sizeof(t_texture));
-	if (!game->wall_t[0])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	game->wall_t[1] = malloc(sizeof(t_texture));
-	if (!game->wall_t[1])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	game->wall_t[2] = malloc(sizeof(t_texture));
-	if (!game->wall_t[2])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	game->wall_t[3] = malloc(sizeof(t_texture));
-	if (!game->wall_t[3])
-		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
+	init_mlx(game->mlx, game);
 	game->ray = malloc(sizeof(t_ray));
 	if (!game->ray)
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
