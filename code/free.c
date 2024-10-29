@@ -6,11 +6,20 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:07:21 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/26 16:21:42 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 11:31:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+
+void	free_wall(t_texture *wall, t_game *game)
+{
+	if (wall)
+	{
+		mlx_destroy_image(game->mlx->mlx_ptr, wall->img);
+		free(wall);
+	}
+}
 
 void	free_map(t_map *map)
 {
@@ -54,25 +63,23 @@ void	free_data(t_data *data, t_game *game)
 			free(data->f);
 		free(data);
 	}
-	if (game->wall_t[0])
-		free(game->wall_t[0]);
-	if (game->wall_t[1])
-		free(game->wall_t[1]);
-	if (game->wall_t[2])
-		free(game->wall_t[2]);
-	if (game->wall_t[3])
-		free(game->wall_t[3]);
 }
 
 void	ft_free_all(t_game *game)
 {
+	int	i;
+
+	i = 0;
 	free_map(game->map);
 	free_data(game->data, game);
 	if (game->ray)
 		free(game->ray);
+	while (i < 4 && game->wall_t[i])
+		free_wall(game->wall_t[i++], game);
 	if (game->mlx)
 	{
 		mlx_destroy_window(game->mlx->mlx_ptr, game->mlx->win_ptr);
+		mlx_destroy_image(game->mlx->mlx_ptr, game->mlx->img_ptr);
 		mlx_destroy_display(game->mlx->mlx_ptr);
 		free(game->mlx->mlx_ptr);
 		free(game->mlx);

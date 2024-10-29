@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:27:18 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/28 18:25:42 by machrist         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:42:25 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+
+float	get_dist(float x, float y)
+{
+	return (sqrt(x * x + y * y));
+}
 
 bool	check_collision(t_game *game, float dir_x, float dir_y)
 {
@@ -21,8 +26,8 @@ bool	check_collision(t_game *game, float dir_x, float dir_y)
 	size_t		map_x;
 
 	player = game->map->player;
-	new_x = player->pos->x + dir_x * 0.3;
-	new_y = player->pos->y + dir_y * 0.3;
+	new_x = player->pos->x + dir_x * 1;
+	new_y = player->pos->y + dir_y * 1;
 	map_x = (int)(new_x / 32);
 	map_y = (int)(new_y / 32);
 	if (map_x >= 0 && map_x < game->map->map_x && map_y >= 0

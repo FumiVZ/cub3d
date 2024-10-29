@@ -3,22 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/28 18:48:12 by machrist         ###   ########.fr       */
+/*   Updated: 2024/10/29 11:18:28 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-t_texture *ft_new_texture(void *mlx, char *path, t_texture *tex, t_game *game)
+t_texture	*ft_new_texture(void *mlx, char *path, t_texture *tex, t_game *game)
 {
+	if (!tex)
+		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	tex->img = mlx_xpm_file_to_image(mlx, path, &tex->width, &tex->height);
 	if (!tex->img)
 		exit_close_msg(game->fd, ERR_MLX, game, NULL);
-	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp,
-			&tex->line_len, &tex->endian);
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
+			&tex->endian);
 	if (!tex->addr)
 		exit_close_msg(game->fd, ERR_MLX, game, NULL);
 	return (tex);
@@ -35,25 +37,27 @@ static void	clear_window(t_game *game)
 		j = 0;
 		while (j < WIDTH)
 		{
-			put_pixel(game, j, i, 0x000000);
+			game->color = 0x000000;
+			put_pixel(game, j, i);
 			j++;
 		}
 		i++;
 	}
 }
 
-void	draw_square(int x, int y, int color, int size, t_game *game)
+void	draw_square(int x, int y, int color, t_game *game)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (i < size)
+	while (i < game->size)
 	{
 		j = 0;
-		while (j < size)
+		while (j < game->size)
 		{
-			put_pixel(game, x + j, y + i, color);
+			game->color = color;
+			put_pixel(game, x + j, y + i);
 			j++;
 		}
 		i++;
@@ -71,19 +75,16 @@ void	draw_mini_map(t_game *game)
 		j = 0;
 		while (j < game->map->map_x)
 		{
+			game->size = 64;
 			if (game->map->map[i][j] == '1')
-				draw_square(j * 8, i * 8, 0x00FF00, 64, game);
+				draw_square(j * 8, i * 8, 0x00FF00, game);
 			else if (game->map->map[i][j] == '0')
-				draw_square(j * 8, i * 8, 0x000000, 64, game);
+				draw_square(j * 8, i * 8, 0x000000, game);
 			j++;
 		}
 		i++;
 	}
-}
-
-float	get_dist(float x, float y)
-{
-	return (sqrt(x * x + y * y));
+	game->size = 4;
 }
 
 int	ft_render_map(t_game *game)
@@ -109,7 +110,7 @@ int	ft_render_map(t_game *game)
 	}
 	draw_mini_map(game);
 	draw_square(game->map->player->pos->x / 4, game->map->player->pos->y / 4,
-		0xFF0000, 2, game);
+		0xFF0000, game);
 	mlx_put_image_to_window(game->mlx->mlx_ptr, game->mlx->win_ptr,
 		game->mlx->img_ptr, 0, 0);
 	return (0);
