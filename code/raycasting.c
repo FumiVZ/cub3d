@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/29 13:40:34 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 17:57:01 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,18 @@ bool	wall_touch(float player_x, float player_y, t_game *game)
 	return (false);
 }
 
-static float	fish_eye_correction(float ray_x, float ray_y, t_game *game)
+static float	fish_eye_correction(float ray_x, float ray_y, t_game *game,
+		float ray_angle)
 {
 	double	dist;
-	float	angle;
-	float	player_angle;
-	float	ray_angle;
+	float	angle_fix;
 
-	ray_angle = atan2(ray_y - game->map->player->pos->y, ray_x
-			- game->map->player->pos->x);
-	player_angle = game->map->player->angle;
-	angle = ray_angle - player_angle;
-	while (angle > PI)
-		angle -= 2 * PI;
-	while (angle < -PI)
-		angle += 2 * PI;
-	dist = sqrt((ray_x - game->map->player->pos->x) * (ray_x
-				- game->map->player->pos->x) + (ray_y
-				- game->map->player->pos->y) * (ray_y
-				- game->map->player->pos->y));
-	return (dist * cos(angle));
+	angle_fix = normalize_angle(ray_angle - game->map->player->angle);
+	if (angle_fix > PI)
+		angle_fix -= 2 * PI;
+	dist = sqrt(pow(ray_x - game->map->player->pos->x, 2) + pow(ray_y
+				- game->map->player->pos->y, 2));
+	return (dist * cos(angle_fix));
 }
 
 static int	identify_wall_face(t_game *game, float prev_x, float prev_y)
@@ -74,6 +66,9 @@ static int	identify_wall_face(t_game *game, float prev_x, float prev_y)
 
 void	init_ray(t_game *game, float start_x, float *prev_x, float *prev_y)
 {
+	float	step;
+
+	step = 0.1;
 	game->ray->cos_angle = cos(start_x);
 	game->ray->sin_angle = sin(start_x);
 	game->ray->x = game->map->player->pos->x;
@@ -82,15 +77,18 @@ void	init_ray(t_game *game, float start_x, float *prev_x, float *prev_y)
 	{
 		*prev_x = game->ray->x;
 		*prev_y = game->ray->y;
-		game->ray->x += game->ray->cos_angle;
-		game->ray->y += game->ray->sin_angle;
+		game->ray->x += game->ray->cos_angle * step;
+		game->ray->y += game->ray->sin_angle * step;
 	}
 	game->ray->tex_x = identify_wall_face(game, *prev_x, *prev_y);
 	if (game->ray->wall_face == WEST || game->ray->wall_face == SOUTH)
 		game->ray->tex_x = game->wall_t[game->ray->wall_face]->width
 			- game->ray->tex_x - 1;
-	game->ray->dist = fish_eye_correction(game->ray->x, game->ray->y, game);
+	game->ray->dist = fish_eye_correction(game->ray->x, game->ray->y, game,
+			start_x);
 	game->ray->line_height = (int)((32 / game->ray->dist) * (WIDTH / 2));
+	if (game->ray->line_height > HEIGHT * 3)
+		game->ray->line_height = HEIGHT * 3;
 	game->ray->draw_start = (HEIGHT - game->ray->line_height) / 2;
 	game->ray->draw_end = game->ray->draw_start + game->ray->line_height;
 }
@@ -111,7 +109,7 @@ void	draw_line(t_game *game, float start_x, int i)
 	while (++y < game->ray->draw_end)
 	{
 		texture_offset = (y - game->ray->draw_start)
-			* (double)game->wall_t[game->ray->wall_face]->width
+			* (double)game->wall_t[game->ray->wall_face]->height
 			/ (game->ray->draw_end - game->ray->draw_start);
 		if (game->wall_t[game->ray->wall_face]
 			&& game->wall_t[game->ray->wall_face]->addr)
