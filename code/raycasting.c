@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/29 11:39:19 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 13:40:34 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@ bool	wall_touch(float player_x, float player_y, t_game *game)
 
 	map_x = (int)(player_x / TILE_SIZE);
 	map_y = (int)(player_y / TILE_SIZE);
-	if (map_x < 0 || map_x >= (int)game->map->map_x || map_y < 0
-		|| map_y >= (int)game->map->map_y)
-		return (true);
 	if (game->map->map[map_y][map_x] == '1')
 		return (true);
 	return (false);

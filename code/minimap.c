@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:18:28 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 13:45:38 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,6 @@ t_texture	*ft_new_texture(void *mlx, char *path, t_texture *tex, t_game *game)
 	if (!tex->addr)
 		exit_close_msg(game->fd, ERR_MLX, game, NULL);
 	return (tex);
-}
-
-static void	clear_window(t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < HEIGHT)
-	{
-		j = 0;
-		while (j < WIDTH)
-		{
-			game->color = 0x000000;
-			put_pixel(game, j, i);
-			j++;
-		}
-		i++;
-	}
 }
 
 void	draw_square(int x, int y, int color, t_game *game)
@@ -98,7 +79,7 @@ int	ft_render_map(t_game *game)
 	fov_angle = PI / 3;
 	half_fov = fov_angle / 2;
 	ft_move_player(game);
-	clear_window(game);
+	mlx_clear_window(game->mlx->mlx_ptr, game->mlx->win_ptr);
 	floor_cell(game);
 	frac = fov_angle / WIDTH;
 	start = game->map->player->angle - half_fov;

@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:38:36 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/29 13:40:04 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,9 +253,5 @@ bool			is_valid(char *str);
 char			**erase_space(char **tab);
 int				*assign_color(char **tab, int *color);
 int				*parse_color(char *line, char *search, size_t i);
-
-// vision.c
-double			get_direction_x(double angle);
-double			get_direction_y(double angle);
 
 #endif
