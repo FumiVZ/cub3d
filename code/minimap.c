@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:48:10 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 13:45:38 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 15:05:25 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ void	draw_mini_map(t_game *game)
 		{
 			game->size = 64;
 			if (game->map->map[i][j] == '1')
-				draw_square(j * 8, i * 8, 0x00FF00, game);
+				draw_square(j * 8, i * 8, 0x7393B3, game);
 			else if (game->map->map[i][j] == '0')
-				draw_square(j * 8, i * 8, 0x000000, game);
+				draw_square(j * 8, i * 8, 0xE5E4E2, game);
 			j++;
 		}
 		i++;
@@ -76,7 +76,7 @@ int	ft_render_map(t_game *game)
 	float	fov_angle;
 	float	half_fov;
 
-	fov_angle = PI / 3;
+	fov_angle = FOV * (PI / 180.0);
 	half_fov = fov_angle / 2;
 	ft_move_player(game);
 	mlx_clear_window(game->mlx->mlx_ptr, game->mlx->win_ptr);

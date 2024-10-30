@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:34:36 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 16:44:26 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	init_map(t_game *game, t_map *map)
 	map->player->dir = malloc(sizeof(t_position));
 	if (!map->player->dir)
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
-	map->player->pos->x = -1;
-	map->player->pos->y = -1;
+	map->player->pos->x = -2;
+	map->player->pos->y = -2;
 	map->player->dir->x = 0;
 	map->player->dir->y = 0;
 }

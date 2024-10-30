@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 18:26:46 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 14:21:16 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ void	init_player_rot(t_player **player, char c)
 	}
 }
 
-void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
+bool	init_player(t_player **player, ssize_t x, ssize_t y, t_map *map)
 {
+	if (map->player->pos->x != -2)
+		return (false);
 	(*player)->up = false;
 	(*player)->down = false;
 	(*player)->right = false;
@@ -50,25 +52,26 @@ void	init_player(t_player **player, ssize_t x, ssize_t y, char c)
 	(*player)->rotate_right = false;
 	(*player)->pos->x = x * 32 + 16;
 	(*player)->pos->y = y * 32 + 16;
-	init_player_rot(player, c);
+	init_player_rot(player, map->map[y][x]);
+	map->map[y][x] = '0';
+	return (true);
 }
 
 bool	check_zero(t_map *map, ssize_t i, ssize_t j)
 {
+	if (!map || !map->map || !map->player)
+		return (false);
 	while (map->map[++j])
 	{
+		if (!map->map[j][0])
+			continue ;
 		i = -1;
-		while (map->map[j][++i])
+		while (map->map[j] && map->map[j][++i])
 		{
-			if ((map->map[j][i] == 'N' || map->map[j][i] == 'S'
-					|| map->map[j][i] == 'E' || map->map[j][i] == 'W'))
-			{
-				if (map->player->pos->x == -1)
-					init_player(&map->player, i, j, map->map[j][i]);
-				else
+			if (map->map[j][i] == 'N' || map->map[j][i] == 'S'
+				|| map->map[j][i] == 'E' || map->map[j][i] == 'W')
+				if (!init_player(&map->player, i, j, map))
 					return (false);
-				map->map[j][i] = '0';
-			}
 			if (map->map[j][i] == '0')
 				if ((j == 0 || j == (ssize_t)map->map_y - 1 || i == 0
 						|| i == (ssize_t)map->map_x - 1)
@@ -79,7 +82,7 @@ bool	check_zero(t_map *map, ssize_t i, ssize_t j)
 				return (false);
 		}
 	}
-	return (map->player->pos->x != -1);
+	return (map->player->pos->x != -2);
 }
 
 static char	*ft_strappend(char *s1, char *s2)

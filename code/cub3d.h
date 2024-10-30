@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 13:40:04 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 16:37:50 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ typedef struct s_ray
 	int			draw_end;
 	int			texture_color;
 	int			tex_x;
+	float		texture_offset;
 }				t_ray;
 
 typedef struct s_game
@@ -191,6 +192,7 @@ int				attribute_rgb(int *color);
 void			floor_cell(t_game *game);
 
 // free.c
+void			free_wall(t_texture *wall, t_game *game);
 void			free_map(t_map *map);
 void			free_data(t_data *data, t_game *game);
 void			ft_free_all(t_game *game);
@@ -209,7 +211,8 @@ void			start_game(t_game *game);
 
 // map.c
 void			init_player_rot(t_player **player, char c);
-void			init_player(t_player **player, ssize_t x, ssize_t y, char c);
+bool			init_player(t_player **player, ssize_t x, ssize_t y,
+					t_map *map);
 bool			check_zero(t_map *map, ssize_t i, ssize_t j);
 bool			check_map(t_map **map, t_game *game, int *fd);
 
@@ -227,20 +230,21 @@ void			ft_strafe_player(t_game *game, double speed);
 void			ft_move_player(t_game *game);
 
 // parse.c
-bool			check_adjacent(char **map, size_t i, size_t j, char c);
 int				parse_textures(char *line, t_data *data, size_t i);
-int				check_parse(t_data *data);
-int				is_finished(t_data *data);
 void			parse_file(t_game *game);
 
+// parse_utils.c
+bool			check_adjacent(char **map, size_t i, size_t j, char c);
+int				check_parse(t_data *data);
+int				is_finished(t_data *data);
+
 // raycasting.c
+bool			wall_touch(float player_x, float player_y, t_game *game);
 void			init_ray(t_game *game, float start_x, float *prev_x,
 					float *prev_y);
 void			draw_line(t_game *game, float start_x, int i);
 
 // ray_utils.c
-float			get_dist(float x, float y);
-bool			wall_touch(float player_x, float player_y, t_game *game);
 int				get_texture_color(t_texture *tex, double texture_offset,
 					int tex_x);
 void			ft_init_textures(t_game *game);
@@ -248,7 +252,7 @@ void			put_pixel(t_game *game, int x, int y);
 float			normalize_angle(float angle);
 
 // texture.c
-char			*data_texture(char *line, char *search, size_t i);
+char			*data_texture(char *line, char *id, size_t i);
 bool			is_valid(char *str);
 char			**erase_space(char **tab);
 int				*assign_color(char **tab, int *color);
