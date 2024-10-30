@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 18:21:24 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 09:43:18 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static bool	is_duplicate_texture(t_data *data, char *id)
 
 static int	assign_texture(char *line, t_data *data, size_t i, char *id)
 {
+	char	*texture_path;
+
 	if (is_duplicate_texture(data, id))
 		return (1);
 	if (ft_strncmp(id, "NO", 2) == 0)
@@ -59,11 +61,15 @@ static int	assign_texture(char *line, t_data *data, size_t i, char *id)
 		data->f = parse_color(line, id, i);
 	else if (ft_strncmp(id, "C", 1) == 0)
 		data->c = parse_color(line, id, i);
-	if ((ft_strncmp(id, "F", 1) == 0 && !data->f)
-		|| (ft_strncmp(id, "C", 1) == 0 && !data->c)
-		|| (ft_strlen(id) == 2 && !data_texture(line, id, i)))
+	texture_path = data_texture(line, id, i);
+	if ((ft_strncmp(id, "F", 1) == 0 && !data->f) || (ft_strncmp(id, "C",
+				1) == 0 && !data->c) || (ft_strlen(id) == 2 && !texture_path))
+	{
+		if (texture_path)
+			free(texture_path);
 		return (1);
-	return (0);
+	}
+	return (free(texture_path), 0);
 }
 
 int	parse_textures(char *line, t_data *data, size_t i)

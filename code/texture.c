@@ -6,24 +6,34 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:22:23 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:21:25 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 09:09:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-char	*data_texture(char *line, char *search, size_t i)
+char	*data_texture(char *line, char *id, size_t i)
 {
-	size_t	j;
+	char	*path;
+	size_t	start;
+	size_t	len;
 
-	j = 0;
-	i += ft_strlen(search);
+	i += ft_strlen(id);
 	while (line[i] && is_space(line[i]))
 		i++;
-	j = i;
-	while (line[i] && !is_space(line[i]))
-		i++;
-	return (ft_substr(line, j, i - j));
+	start = i;
+	len = 0;
+	while (line[i + len] && !is_space(line[i + len]) && line[i + len] != '\n')
+		len++;
+	path = ft_substr(line, start, len);
+	if (!path)
+		return (NULL);
+	if (access(path, F_OK) == -1)
+	{
+		free(path);
+		return (NULL);
+	}
+	return (path);
 }
 
 bool	is_valid(char *str)
