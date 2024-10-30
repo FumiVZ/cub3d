@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/30 09:43:18 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 14:23:10 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,10 @@ void	parse_file(t_game *game)
 		if (is_finished(game->data))
 			break ;
 		if (parse_textures(line, game->data, i))
-		{
-			fprintf(stderr, "parse_textures\n");
 			exit_close_msg(game->fd, ERR_PARSE, game, line);
-		}
 		free(line);
 		line = get_next_line(game->fd);
 	}
-	fprintf(stderr, "check_map\n");
 	if (!check_map(&game->map, game, &game->fd))
 		exit_close_msg(game->fd, ERR_PARSE, game, line);
 	free(line);

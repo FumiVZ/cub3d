@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/30 09:43:59 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 16:49:02 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,29 @@ static float	fish_eye_correction(float ray_x, float ray_y, t_game *game,
 {
 	double	dist;
 	float	angle_fix;
+	float	perp_dist;
 
 	angle_fix = normalize_angle(ray_angle - game->map->player->angle);
 	if (angle_fix > PI)
 		angle_fix -= 2 * PI;
 	dist = sqrt(pow(ray_x - game->map->player->pos->x, 2) + pow(ray_y
 				- game->map->player->pos->y, 2));
-	return (dist * cos(angle_fix));
+	perp_dist = dist * cos(angle_fix);
+	game->ray->dist = perp_dist;
+	game->ray->line_height = (int)((TILE_SIZE / perp_dist) * ((WIDTH / 2)
+				/ tan(PI / 6)));
+	game->ray->draw_start = (HEIGHT - game->ray->line_height) / 2;
+	if (game->ray->draw_start < 0)
+	{
+		game->ray->texture_offset = -game->ray->draw_start;
+		game->ray->draw_start = 0;
+	}
+	else
+		game->ray->texture_offset = 0;
+	game->ray->draw_end = game->ray->draw_start + game->ray->line_height;
+	if (game->ray->draw_end >= HEIGHT)
+		game->ray->draw_end = HEIGHT;
+	return (perp_dist);
 }
 
 static int	identify_wall_face(t_game *game, float prev_x, float prev_y)
@@ -68,7 +84,8 @@ void	init_ray(t_game *game, float start_x, float *prev_x, float *prev_y)
 {
 	float	step;
 
-	step = 0.1;
+	step = 0.5;
+	game->ray->texture_offset = 0;
 	game->ray->cos_angle = cos(start_x);
 	game->ray->sin_angle = sin(start_x);
 	game->ray->x = game->map->player->pos->x;
@@ -86,11 +103,6 @@ void	init_ray(t_game *game, float start_x, float *prev_x, float *prev_y)
 			- game->ray->tex_x - 1;
 	game->ray->dist = fish_eye_correction(game->ray->x, game->ray->y, game,
 			start_x);
-	game->ray->line_height = (int)((32 / game->ray->dist) * (WIDTH / 2));
-	if (game->ray->line_height > HEIGHT * 3)
-		game->ray->line_height = HEIGHT * 3;
-	game->ray->draw_start = (HEIGHT - game->ray->line_height) / 2;
-	game->ray->draw_end = game->ray->draw_start + game->ray->line_height;
 }
 
 void	draw_line(t_game *game, float start_x, int i)
@@ -101,16 +113,12 @@ void	draw_line(t_game *game, float start_x, int i)
 	float	prev_y;
 
 	init_ray(game, start_x, &prev_x, &prev_y);
-	if (game->ray->draw_start < 0)
-		game->ray->draw_start = 0;
-	if (game->ray->draw_end >= HEIGHT)
-		game->ray->draw_end = HEIGHT - 1;
 	y = game->ray->draw_start - 1;
 	while (++y < game->ray->draw_end)
 	{
-		texture_offset = (y - game->ray->draw_start)
+		texture_offset = (y - game->ray->draw_start + game->ray->texture_offset)
 			* (double)game->wall_t[game->ray->wall_face]->height
-			/ (game->ray->draw_end - game->ray->draw_start);
+			/ game->ray->line_height;
 		if (game->wall_t[game->ray->wall_face]
 			&& game->wall_t[game->ray->wall_face]->addr)
 		{
