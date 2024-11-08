@@ -6,11 +6,30 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:21:03 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 18:21:54 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 23:11:07 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+
+int	parse_textures(char *line, t_data *data, size_t i)
+{
+	const char	*identifiers[] = {"NO", "SO", "WE", "EA", "F", "C"};
+	int			j;
+
+	j = 0;
+	while (j < 6)
+	{
+		if (is_valid_identifier(line, i, (char *)identifiers[j]))
+			return (assign_texture(line, data, i, (char *)identifiers[j]));
+		j++;
+	}
+	while (line[i] && is_space(line[i]))
+		i++;
+	if (line[i] && !is_space(line[i]))
+		return (1);
+	return (0);
+}
 
 bool	check_adjacent(char **map, size_t i, size_t j, char c)
 {

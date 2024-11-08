@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:07:21 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/29 11:31:43 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/11/08 16:19:28 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	ft_free_all(t_game *game)
 	free_data(game->data, game);
 	if (game->ray)
 		free(game->ray);
-	while (i < 4 && game->wall_t[i])
+	while (i < 4)
 		free_wall(game->wall_t[i++], game);
 	if (game->mlx)
 	{

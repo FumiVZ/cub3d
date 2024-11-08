@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:22:23 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/30 09:09:43 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/31 05:12:03 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*data_texture(char *line, char *id, size_t i)
 		i++;
 	start = i;
 	len = 0;
-	while (line[i + len] && !is_space(line[i + len]) && line[i + len] != '\n')
+	while (line[i + len] && line[i + len] != '\n')
 		len++;
 	path = ft_substr(line, start, len);
 	if (!path)
@@ -89,6 +89,8 @@ int	*assign_color(char **tab, int *color)
 	while (tab[i])
 	{
 		color[i] = ft_atoi(tab[i]);
+		if (color[i] > 255)
+			return (free(color), NULL);
 		i++;
 	}
 	color[i] = -1;

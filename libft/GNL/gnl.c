@@ -6,14 +6,14 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 13:50:02 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/29 17:36:00 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 23:09:19 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
 #include "gnl.h"
+#include <string.h>
 
-# ifndef BUFFER_SIZE
+#ifndef BUFFER_SIZE
 # define BUFFER_SIZE 32
 #endif
 
@@ -93,4 +93,3 @@ char	*get_next_line(int fd)
 	}
 	return (buff);
 }
-

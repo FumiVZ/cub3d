@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:47:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/30 16:37:50 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/11/08 16:21:14 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,14 @@ typedef struct s_data
 	char		*so;
 	char		*we;
 	char		*ea;
+	bool		ea_bool;
+	bool		we_bool;
+	bool		no_bool;
+	bool		so_bool;
 	int			*f;
 	int			*c;
+	bool		f_bool;
+	bool		c_bool;
 	int			bits_per_pixel;
 	int			size_line;
 	int			endian;
@@ -230,10 +236,12 @@ void			ft_strafe_player(t_game *game, double speed);
 void			ft_move_player(t_game *game);
 
 // parse.c
-int				parse_textures(char *line, t_data *data, size_t i);
-void			parse_file(t_game *game);
+bool			is_valid_identifier(char *line, size_t i, char *id);
+int				assign_texture(char *line, t_data *data, size_t i, char *id);
+void			parse_file(t_game *game, char *line);
 
 // parse_utils.c
+int				parse_textures(char *line, t_data *data, size_t i);
 bool			check_adjacent(char **map, size_t i, size_t j, char c);
 int				check_parse(t_data *data);
 int				is_finished(t_data *data);

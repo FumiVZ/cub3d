@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:27:18 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/30 16:28:50 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 23:07:00 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ bool	check_collision(t_game *game, float dir_x, float dir_y)
 	size_t	map_y;
 	float	angle;
 
-	new_x = game->map->player->pos->x + dir_x * 1;
-	new_y = game->map->player->pos->y + dir_y * 1;
+	new_x = game->map->player->pos->x + dir_x * 5;
+	new_y = game->map->player->pos->y + dir_y * 5;
 	angle = 0;
 	while (angle < 2 * PI)
 	{
@@ -102,7 +102,7 @@ void	ft_move_player(t_game *game)
 	double		speed;
 	float		rot_speed;
 
-	speed = 1;
+	speed = 5;
 	rot_speed = 0.05;
 	player = game->map->player;
 	if (player->rotate_left)
