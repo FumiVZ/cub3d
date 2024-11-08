@@ -6,13 +6,13 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 10:59:26 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/30 14:23:10 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/31 05:04:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static bool	is_valid_identifier(char *line, size_t i, char *id)
+bool	is_valid_identifier(char *line, size_t i, char *id)
 {
 	size_t	len;
 
@@ -28,25 +28,42 @@ static bool	is_valid_identifier(char *line, size_t i, char *id)
 
 static bool	is_duplicate_texture(t_data *data, char *id)
 {
-	if (ft_strncmp(id, "NO", 2) == 0 && data->no)
+	if (ft_strncmp(id, "NO", 2) == 0 && data->no_bool)
 		return (true);
-	if (ft_strncmp(id, "SO", 2) == 0 && data->so)
+	if (ft_strncmp(id, "SO", 2) == 0 && data->so_bool)
 		return (true);
-	if (ft_strncmp(id, "WE", 2) == 0 && data->we)
+	if (ft_strncmp(id, "WE", 2) == 0 && data->we_bool)
 		return (true);
-	if (ft_strncmp(id, "EA", 2) == 0 && data->ea)
+	if (ft_strncmp(id, "EA", 3) == 0 && data->ea_bool)
 		return (true);
-	if (ft_strncmp(id, "F", 1) == 0 && data->f)
+	if (ft_strncmp(id, "F", 1) == 0 && data->f_bool)
 		return (true);
-	if (ft_strncmp(id, "C", 1) == 0 && data->c)
+	if (ft_strncmp(id, "C", 1) == 0 && data->c_bool)
 		return (true);
 	return (false);
 }
 
-static int	assign_texture(char *line, t_data *data, size_t i, char *id)
+static void	set_data_bool(t_data *data, char *id)
+{
+	if (ft_strncmp(id, "NO", 2) == 0)
+		data->no_bool = true;
+	else if (ft_strncmp(id, "SO", 2) == 0)
+		data->so_bool = true;
+	else if (ft_strncmp(id, "WE", 2) == 0)
+		data->we_bool = true;
+	else if (ft_strncmp(id, "EA", 2) == 0)
+		data->ea_bool = true;
+	else if (ft_strncmp(id, "C", 1) == 0)
+		data->c_bool = true;
+	else if (ft_strncmp(id, "F", 1) == 0)
+		data->f_bool = true;
+}
+
+int	assign_texture(char *line, t_data *data, size_t i, char *id)
 {
 	char	*texture_path;
 
+	texture_path = NULL;
 	if (is_duplicate_texture(data, id))
 		return (1);
 	if (ft_strncmp(id, "NO", 2) == 0)
@@ -61,40 +78,17 @@ static int	assign_texture(char *line, t_data *data, size_t i, char *id)
 		data->f = parse_color(line, id, i);
 	else if (ft_strncmp(id, "C", 1) == 0)
 		data->c = parse_color(line, id, i);
+	set_data_bool(data, id);
 	texture_path = data_texture(line, id, i);
-	if ((ft_strncmp(id, "F", 1) == 0 && !data->f) || (ft_strncmp(id, "C",
-				1) == 0 && !data->c) || (ft_strlen(id) == 2 && !texture_path))
-	{
-		if (texture_path)
-			free(texture_path);
-		return (1);
-	}
-	return (free(texture_path), 0);
-}
-
-int	parse_textures(char *line, t_data *data, size_t i)
-{
-	const char	*identifiers[] = {"NO", "SO", "WE", "EA", "F", "C"};
-	int			j;
-
-	j = 0;
-	while (j < 6)
-	{
-		if (is_valid_identifier(line, i, (char *)identifiers[j]))
-			return (assign_texture(line, data, i, (char *)identifiers[j]));
-		j++;
-	}
-	while (line[i] && is_space(line[i]))
-		i++;
-	if (line[i] && !is_space(line[i]))
-		return (1);
+	if ((ft_strlen(id) == 2 && !texture_path))
+		return (free(texture_path), 1);
+	free(texture_path);
 	return (0);
 }
 
-void	parse_file(t_game *game)
+void	parse_file(t_game *game, char *line)
 {
 	size_t	i;
-	char	*line;
 
 	line = get_next_line(game->fd);
 	if (!line)
@@ -104,10 +98,15 @@ void	parse_file(t_game *game)
 		i = 0;
 		while (line[i] && is_space(line[i]))
 			i++;
-		if (is_finished(game->data))
-			break ;
 		if (parse_textures(line, game->data, i))
 			exit_close_msg(game->fd, ERR_PARSE, game, line);
+		if (is_finished(game->data))
+			break ;
+		free(line);
+		line = get_next_line(game->fd);
+	}
+	while (line && line[0] == '\n')
+	{
 		free(line);
 		line = get_next_line(game->fd);
 	}

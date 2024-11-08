@@ -1,14 +1,14 @@
-
-F 126,126,126
-C 54, 69, 79
-
 NO ./textures/TECH_1E.xpm
 SO ./textures/TECH_1E.xpm
+F 126,255,126
 WE ./textures/TECH_2F.xpm
 EA ./textures/TECH_3B.xpm
-   
-                    
-                        
+C 54, 0, 0
+ 
+ 
+ 
+ 
+ 
 111111111111111
 111111111111111
 100000000000001

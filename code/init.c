@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:43:59 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/30 16:44:26 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/31 13:24:11 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ static void	init_data(t_game *game)
 	game->data->ea = NULL;
 	game->data->c = NULL;
 	game->data->f = NULL;
+	game->data->no_bool = false;
+	game->data->so_bool = false;
+	game->data->we_bool = false;
+	game->data->ea_bool = false;
+	game->data->f_bool = false;
+	game->data->c_bool = false;
 }
 
 void	init_map(t_game *game, t_map *map)
@@ -85,7 +91,7 @@ void	init_game(t_game *game, char *name_file)
 	if (!game->map)
 		exit_close_msg(game->fd, ERR_MALLOC, game, NULL);
 	init_map(game, game->map);
-	parse_file(game);
+	parse_file(game, NULL);
 	if (check_parse(game->data))
 		exit_close_msg(game->fd, ERR_PARSE, game, NULL);
 	game->mlx = malloc(sizeof(t_mlx));

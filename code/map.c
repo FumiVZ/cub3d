@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 14:56:42 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/10/30 14:21:16 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 22:33:23 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,10 @@ bool	check_map(t_map **map, t_game *game, int *fd)
 	tmp = ft_strdup("");
 	if (!tmp)
 		return (fprintf(stderr, "Malloc failed\n"), false);
-	(*map)->map_x = 0;
 	while (true)
 	{
 		line = get_next_line(*fd);
-		if (!line)
+		if (!line || line[0] == '\n')
 			break ;
 		if ((*map)->map_x < ft_strlen(line))
 			(*map)->map_x = ft_strlen(line) - 1;
@@ -127,9 +126,10 @@ bool	check_map(t_map **map, t_game *game, int *fd)
 		if (!tmp)
 			return (fprintf(stderr, "Malloc failed\n"), false);
 	}
+	if (line)
+		return (free(line), free(tmp), close(*fd), false);
 	(*map)->map = ft_split(tmp, '\n');
 	(*map)->map_y = ft_strstrlen((*map)->map);
 	*map = fill_with_space(*map, game);
-	free(tmp);
-	return (close(*fd), check_zero(*map, -1, -1));
+	return (free(tmp), close(*fd), check_zero(*map, -1, -1));
 }

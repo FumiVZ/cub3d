@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:41:25 by machrist          #+#    #+#             */
-/*   Updated: 2024/10/30 16:49:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/11/08 16:11:22 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	init_ray(t_game *game, float start_x, float *prev_x, float *prev_y)
 {
 	float	step;
 
-	step = 0.5;
+	step = 0.05;
 	game->ray->texture_offset = 0;
 	game->ray->cos_angle = cos(start_x);
 	game->ray->sin_angle = sin(start_x);

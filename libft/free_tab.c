@@ -6,13 +6,13 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:54:54 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/09/25 17:02:10 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/10/30 23:09:07 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void free_tab(char **tab)
+void	free_tab(char **tab)
 {
 	size_t	i;
 
